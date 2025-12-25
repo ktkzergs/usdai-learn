@@ -3,480 +3,603 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USD.AI Explained - GPU-Backed Stablecoin for the AI Era</title>
+    <title>USD.AI Sandbox - Learn by Building</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Progress Indicator -->
-    <div class="scroll-progress" id="scrollProgress"></div>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-logo">USD.AI Sandbox</div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-section="intro">The Problem</button>
+            <button class="nav-tab" data-section="builder">Build a Pool</button>
+            <button class="nav-tab" data-section="exit">Exit Queue</button>
+        </div>
+        <a href="https://app.usd.ai" target="_blank" class="nav-cta">Try USD.AI →</a>
+    </nav>
 
-    <!-- Floating CTA -->
-    <a href="https://app.usd.ai" target="_blank" class="floating-cta">
-        <span>Try USD.AI</span>
-        <span class="arrow">→</span>
-    </a>
-
-    <!-- Main Scroll Container -->
-    <main class="scroll-container">
-
-        <!-- SLIDE 1: Hook -->
-        <section class="slide slide-hook">
-            <div class="slide-content">
-                <div class="hook-emoji">🏦</div>
-                <h1>What if I told you...</h1>
-                <p class="hook-text">Banks are just <span class="highlight">mortgage factories</span> with a nice checking account UI?</p>
-                <div class="scroll-hint">
-                    <span>Scroll to learn the secret</span>
-                    <div class="scroll-arrow">↓</div>
-                </div>
+    <!-- Section 1: The Problem (Story Intro) -->
+    <section class="section active" id="intro">
+        <div class="story-container">
+            <div class="story-chapter">
+                <div class="chapter-number">Chapter 1</div>
+                <h1>The Old Way Was Broken</h1>
             </div>
-        </section>
 
-        <!-- SLIDE 2: Banks = MBS Factories -->
-        <section class="slide slide-reveal">
-            <div class="slide-content">
-                <div class="comparison-visual">
-                    <div class="reality-box">
-                        <div class="box-label">What you see</div>
-                        <div class="box-icon">🏦</div>
-                        <div class="box-text">Your Bank</div>
-                        <div class="features">
-                            <span>✓ Checking Account</span>
-                            <span>✓ Savings Account</span>
-                            <span>✓ Nice App</span>
+            <div class="story-scroll">
+                <!-- Story Beat 1 -->
+                <div class="story-beat" data-step="1">
+                    <div class="beat-visual">
+                        <div class="visual-bank">
+                            <div class="building">
+                                <div class="building-top"></div>
+                                <div class="building-body">
+                                    <div class="building-window"></div>
+                                    <div class="building-window"></div>
+                                    <div class="building-window"></div>
+                                    <div class="building-door"></div>
+                                </div>
+                            </div>
+                            <div class="label">Traditional Bank</div>
                         </div>
                     </div>
-                    <div class="equals-sign">=</div>
-                    <div class="reality-box glow">
-                        <div class="box-label">What it actually is</div>
-                        <div class="box-icon">🏭</div>
-                        <div class="box-text">MBS Factory</div>
-                        <div class="features">
-                            <span>📦 Package mortgages</span>
-                            <span>📜 Securitize them</span>
-                            <span>💰 Sell to investors</span>
+                    <div class="beat-text">
+                        <h2>Banks discovered a trick.</h2>
+                        <p>Take thousands of home loans. Bundle them together. Sell the bundle to investors.</p>
+                        <p class="insight">This is called a <strong>Mortgage-Backed Security (MBS)</strong>. Your bank deposit? It's really just fuel for this factory.</p>
+                    </div>
+                </div>
+
+                <!-- Story Beat 2 -->
+                <div class="story-beat" data-step="2">
+                    <div class="beat-visual">
+                        <div class="mbs-flow">
+                            <div class="flow-node">
+                                <div class="node-icon house"></div>
+                                <span>1,000 Mortgages</span>
+                            </div>
+                            <div class="flow-arrow"></div>
+                            <div class="flow-node">
+                                <div class="node-icon package"></div>
+                                <span>Package</span>
+                            </div>
+                            <div class="flow-arrow"></div>
+                            <div class="flow-node">
+                                <div class="node-icon document"></div>
+                                <span>Fixed Security</span>
+                            </div>
                         </div>
                     </div>
+                    <div class="beat-text">
+                        <h2>But there's a problem.</h2>
+                        <p>Each MBS is <strong>frozen in time</strong>. Fixed pool. Fixed terms. Takes 12+ months to create.</p>
+                        <p class="insight">If you want to add one more mortgage? Too bad. Start a whole new pool.</p>
+                    </div>
                 </div>
-                <p class="insight">Your deposits fund mortgages → packaged into securities → sold for profit</p>
-            </div>
-        </section>
 
-        <!-- SLIDE 3: MBS Explained Simply -->
-        <section class="slide slide-mbs">
-            <div class="slide-content">
-                <h2>MBS = Mortgage-Backed Securities</h2>
-                <div class="simple-flow">
-                    <div class="flow-item">
-                        <div class="flow-icon">🏠🏠🏠</div>
-                        <div class="flow-label">1000s of mortgages</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <div class="flow-icon">📦</div>
-                        <div class="flow-label">Package together</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <div class="flow-icon">📜</div>
-                        <div class="flow-label">Create security</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">
-                        <div class="flow-icon">💵</div>
-                        <div class="flow-label">Investors buy it</div>
-                    </div>
-                </div>
-                <div class="key-insight">
-                    <span class="bulb">💡</span>
-                    <span>This is how banks make money. You deposit → They lend → Package → Profit.</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 4: The AI Era Problem -->
-        <section class="slide slide-problem">
-            <div class="slide-content">
-                <div class="era-badge">🤖 THE AI ERA</div>
-                <h2>Now there's a new asset class...</h2>
-                <div class="gpu-visual">
-                    <div class="gpu-card">
-                        <div class="gpu-icon">🖥️</div>
-                        <div class="gpu-label">GPUs</div>
-                        <div class="gpu-desc">The computers that power AI</div>
-                    </div>
-                </div>
-                <div class="stat-row">
-                    <div class="stat">
-                        <div class="stat-value">$200B+</div>
-                        <div class="stat-label">GPU demand by 2027</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">0%</div>
-                        <div class="stat-label">Bank financed</div>
-                    </div>
-                </div>
-                <p class="problem-text">Banks <span class="red">CAN'T</span> finance GPUs. Here's why...</p>
-            </div>
-        </section>
-
-        <!-- SLIDE 5: Why Banks Can't -->
-        <section class="slide slide-why-not">
-            <div class="slide-content">
-                <h2>Why Banks Can't Finance GPUs</h2>
-                <div class="blocker-list">
-                    <div class="blocker" data-delay="0">
-                        <div class="blocker-icon">⚖️</div>
-                        <div class="blocker-content">
-                            <div class="blocker-title">Basel III Rules</div>
-                            <div class="blocker-desc">GPUs require 100-250% risk weighting. Banks need $10M+ capital per $100M loan.</div>
-                        </div>
-                        <div class="blocker-x">✗</div>
-                    </div>
-                    <div class="blocker" data-delay="1">
-                        <div class="blocker-icon">⏱️</div>
-                        <div class="blocker-content">
-                            <div class="blocker-title">Too Slow</div>
-                            <div class="blocker-desc">12+ months to securitize. New GPU chips come out every 18 months.</div>
-                        </div>
-                        <div class="blocker-x">✗</div>
-                    </div>
-                    <div class="blocker" data-delay="2">
-                        <div class="blocker-icon">📉</div>
-                        <div class="blocker-content">
-                            <div class="blocker-title">Depreciation</div>
-                            <div class="blocker-desc">GPUs lose 40% value in 3 years. Banks can't hold on their books.</div>
-                        </div>
-                        <div class="blocker-x">✗</div>
-                    </div>
-                    <div class="blocker" data-delay="3">
-                        <div class="blocker-icon">❓</div>
-                        <div class="blocker-content">
-                            <div class="blocker-title">No Comparables</div>
-                            <div class="blocker-desc">ChatGPT is only 3 years old. No historical data for risk models.</div>
-                        </div>
-                        <div class="blocker-x">✗</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 6: The Gap -->
-        <section class="slide slide-gap">
-            <div class="slide-content">
-                <h2>This creates a massive gap</h2>
-                <div class="gap-visual">
-                    <div class="demand-side">
-                        <div class="side-icon">🖥️🖥️🖥️</div>
-                        <div class="side-label">GPU Demand</div>
-                        <div class="side-amount">$200B+</div>
-                    </div>
-                    <div class="gap-space">
-                        <div class="gap-label">THE GAP</div>
-                        <div class="gap-line"></div>
-                    </div>
-                    <div class="supply-side">
-                        <div class="side-icon">🏦</div>
-                        <div class="side-label">Bank Financing</div>
-                        <div class="side-amount red">$0</div>
-                    </div>
-                </div>
-                <p class="gap-text">Who fills this gap? Private credit at <span class="red">18-20% rates</span>.</p>
-            </div>
-        </section>
-
-        <!-- SLIDE 7: Enter USD.AI -->
-        <section class="slide slide-solution">
-            <div class="slide-content">
-                <div class="solution-intro">
-                    <div class="solution-badge">💡 THE SOLUTION</div>
-                    <h2>What if we built an MBS factory...</h2>
-                    <h2 class="gradient-text">...for GPUs?</h2>
-                </div>
-                <div class="usdai-reveal">
-                    <div class="usdai-logo">USD.AI</div>
-                    <p class="usdai-tagline">The GPU-backed stablecoin for the AI era</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 8: The Comparison -->
-        <section class="slide slide-compare">
-            <div class="slide-content">
-                <h2>Same playbook. Different asset.</h2>
-                <div class="compare-table">
-                    <div class="compare-row header">
-                        <div class="compare-cell"></div>
-                        <div class="compare-cell">🏦 Traditional Bank</div>
-                        <div class="compare-cell highlight">🚀 USD.AI</div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="compare-cell label">Collateral</div>
-                        <div class="compare-cell">Houses 🏠</div>
-                        <div class="compare-cell highlight">GPUs 🖥️</div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="compare-cell label">You Deposit</div>
-                        <div class="compare-cell">USD → Savings</div>
-                        <div class="compare-cell highlight">USDC → USDai</div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="compare-cell label">Yield Product</div>
-                        <div class="compare-cell">CD / Bonds</div>
-                        <div class="compare-cell highlight">sUSDai</div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="compare-cell label">APR</div>
-                        <div class="compare-cell">4-5%</div>
-                        <div class="compare-cell highlight glow">10-15%</div>
-                    </div>
-                    <div class="compare-row">
-                        <div class="compare-cell label">Speed</div>
-                        <div class="compare-cell">12+ months</div>
-                        <div class="compare-cell highlight">Instant ⚡</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 9: How It Works -->
-        <section class="slide slide-how">
-            <div class="slide-content">
-                <h2>How USD.AI Works</h2>
-                <div class="mechanism-flow">
-                    <div class="mech-step" data-step="1">
-                        <div class="mech-number">1</div>
-                        <div class="mech-icon">💵</div>
-                        <div class="mech-title">You Deposit</div>
-                        <div class="mech-desc">USDC/USDT goes in, you get USDai (always worth $1)</div>
-                    </div>
-                    <div class="mech-arrow">↓</div>
-                    <div class="mech-step" data-step="2">
-                        <div class="mech-number">2</div>
-                        <div class="mech-icon">🖥️</div>
-                        <div class="mech-title">Funds GPUs</div>
-                        <div class="mech-desc">Your money helps buy AI infrastructure. GPUs are the collateral.</div>
-                    </div>
-                    <div class="mech-arrow">↓</div>
-                    <div class="mech-step" data-step="3">
-                        <div class="mech-number">3</div>
-                        <div class="mech-icon">🤖</div>
-                        <div class="mech-title">AI Companies Pay</div>
-                        <div class="mech-desc">Data centers rent GPUs. They pay interest on the loans.</div>
-                    </div>
-                    <div class="mech-arrow">↓</div>
-                    <div class="mech-step" data-step="4">
-                        <div class="mech-number">4</div>
-                        <div class="mech-icon">📈</div>
-                        <div class="mech-title">You Earn Yield</div>
-                        <div class="mech-desc">Stake USDai → sUSDai. Earn 10-15% APR.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 10: The Two Tokens -->
-        <section class="slide slide-tokens">
-            <div class="slide-content">
-                <h2>Two Tokens, One System</h2>
-                <div class="token-cards">
-                    <div class="token-card usdai">
-                        <div class="token-icon">🪙</div>
-                        <div class="token-name">USDai</div>
-                        <div class="token-type">The Stablecoin</div>
-                        <ul class="token-features">
-                            <li>Always worth $1</li>
-                            <li>Instantly redeemable</li>
-                            <li>No yield (like a checking account)</li>
-                            <li>Liquid - use anywhere</li>
-                        </ul>
-                    </div>
-                    <div class="stake-arrow">
-                        <span>STAKE</span>
-                        <span class="arrow">→</span>
-                    </div>
-                    <div class="token-card susdai glow">
-                        <div class="token-icon">📦</div>
-                        <div class="token-name">sUSDai</div>
-                        <div class="token-type">The Yield Token</div>
-                        <ul class="token-features">
-                            <li>Earns 10-15% APR</li>
-                            <li>Backed by GPU loans</li>
-                            <li>Value grows over time</li>
-                            <li>30-day unstaking</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="token-insight">
-                    <span class="bulb">💡</span>
-                    <span>USDai = Checking Account. sUSDai = High-Yield Savings.</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 11: Why It's Better -->
-        <section class="slide slide-advantage">
-            <div class="slide-content">
-                <h2>Why USD.AI Wins</h2>
-                <div class="advantage-grid">
-                    <div class="advantage-item">
-                        <div class="adv-icon">⚡</div>
-                        <div class="adv-title">No Basel III</div>
-                        <div class="adv-desc">DeFi protocol, not a bank. No regulatory capital requirements.</div>
-                    </div>
-                    <div class="advantage-item">
-                        <div class="adv-icon">🔗</div>
-                        <div class="adv-title">Tokenized Instantly</div>
-                        <div class="adv-desc">On Arbitrum. Origination costs = pennies. Not months.</div>
-                    </div>
-                    <div class="advantage-item">
-                        <div class="adv-icon">💰</div>
-                        <div class="adv-title">Cheaper Capital</div>
-                        <div class="adv-desc">Lend at 12% vs private credit's 18-20%. Better for everyone.</div>
-                    </div>
-                    <div class="advantage-item">
-                        <div class="adv-icon">🛡️</div>
-                        <div class="adv-title">GPU Collateralized</div>
-                        <div class="adv-desc">Real hardware backing. If borrower defaults, seize the GPUs.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 12: The Cost Math -->
-        <section class="slide slide-math">
-            <div class="slide-content">
-                <h2>The Math That Matters</h2>
-                <div class="cost-comparison">
-                    <div class="cost-box bad">
-                        <div class="cost-label">Private Credit</div>
-                        <div class="cost-breakdown">
-                            <div class="cost-line">Base Rate: 13%</div>
-                            <div class="cost-line">+ Management Fee: 1.5%</div>
-                            <div class="cost-line">+ Performance Fee: 15-20%</div>
-                            <div class="cost-total">= 18-20% effective rate</div>
-                        </div>
-                        <div class="verdict">❌ Expensive</div>
-                    </div>
-                    <div class="vs-badge">VS</div>
-                    <div class="cost-box good">
-                        <div class="cost-label">USD.AI</div>
-                        <div class="cost-breakdown">
-                            <div class="cost-line">20% USDai (0% cost)</div>
-                            <div class="cost-line">+ 80% sUSDai</div>
-                            <div class="cost-line">= Blended lower rate</div>
-                            <div class="cost-total">= 10-12% effective rate</div>
-                        </div>
-                        <div class="verdict">✓ Cheaper</div>
-                    </div>
-                </div>
-                <p class="math-insight">Free float of USDai subsidizes borrower rates. Everyone wins.</p>
-            </div>
-        </section>
-
-        <!-- SLIDE 13: Summary -->
-        <section class="slide slide-summary">
-            <div class="slide-content">
-                <h2>TL;DR</h2>
-                <div class="summary-cards">
-                    <div class="summary-card">
-                        <div class="sum-icon">🏦</div>
-                        <div class="sum-text">Banks = MBS factories for houses</div>
-                    </div>
-                    <div class="summary-card highlight">
-                        <div class="sum-icon">🚀</div>
-                        <div class="sum-text">USD.AI = MBS factory for GPUs</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="sum-icon">🤖</div>
-                        <div class="sum-text">Built for the AI era's speed</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="sum-icon">💰</div>
-                        <div class="sum-text">Earn 10-15% APR on your stables</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SLIDE 14: CTA -->
-        <section class="slide slide-cta">
-            <div class="slide-content">
-                <div class="cta-content">
-                    <h2>Ready to earn yield from the AI revolution?</h2>
-                    <div class="cta-steps">
-                        <div class="cta-step">
-                            <span class="step-num">1</span>
-                            <span>Deposit USDC</span>
-                        </div>
-                        <div class="cta-arrow">→</div>
-                        <div class="cta-step">
-                            <span class="step-num">2</span>
-                            <span>Get USDai</span>
-                        </div>
-                        <div class="cta-arrow">→</div>
-                        <div class="cta-step">
-                            <span class="step-num">3</span>
-                            <span>Stake for sUSDai</span>
-                        </div>
-                        <div class="cta-arrow">→</div>
-                        <div class="cta-step glow">
-                            <span class="step-num">4</span>
-                            <span>Earn 10-15%</span>
+                <!-- Story Beat 3 -->
+                <div class="story-beat" data-step="3">
+                    <div class="beat-visual">
+                        <div class="gpu-need">
+                            <div class="gpu-visual">
+                                <div class="gpu-chip">
+                                    <div class="chip-detail"></div>
+                                    <div class="chip-detail"></div>
+                                    <div class="chip-detail"></div>
+                                </div>
+                            </div>
+                            <div class="demand-bar">
+                                <div class="demand-fill" style="width: 85%"></div>
+                                <span class="demand-label">$200B+ demand</span>
+                            </div>
                         </div>
                     </div>
-                    <a href="https://app.usd.ai" target="_blank" class="big-cta">
-                        Start Earning Now →
-                    </a>
-                    <div class="cta-links">
-                        <a href="https://docs.usd.ai" target="_blank">Read Docs</a>
-                        <a href="https://t.me/usdaiofficial" target="_blank">Join Telegram</a>
-                        <a href="https://x.com/USDai_Official" target="_blank">Follow on X</a>
+                    <div class="beat-text">
+                        <h2>Then AI exploded.</h2>
+                        <p>Companies need GPUs. Lots of them. But they cost millions.</p>
+                        <p class="highlight-stat">$200B+ in GPU financing needed. Banks provide: <span class="zero">$0</span></p>
                     </div>
                 </div>
-            </div>
-        </section>
 
-    </main>
+                <!-- Story Beat 4 -->
+                <div class="story-beat" data-step="4">
+                    <div class="beat-visual">
+                        <div class="blocker-list">
+                            <div class="blocker-item">
+                                <div class="blocker-x">✗</div>
+                                <span>Basel III: 100-250% risk weight</span>
+                            </div>
+                            <div class="blocker-item">
+                                <div class="blocker-x">✗</div>
+                                <span>12+ months to securitize</span>
+                            </div>
+                            <div class="blocker-item">
+                                <div class="blocker-x">✗</div>
+                                <span>GPUs depreciate 40% in 3 years</span>
+                            </div>
+                            <div class="blocker-item">
+                                <div class="blocker-x">✗</div>
+                                <span>No historical data (AI is 3 years old)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="beat-text">
+                        <h2>Why can't banks do this?</h2>
+                        <p>Regulations make it impossible. The math doesn't work for them.</p>
+                        <p class="insight">So private credit funds charge <strong>18-20% rates</strong>. Someone's getting rich, and it's not you.</p>
+                    </div>
+                </div>
 
-    <!-- Floating Yield Calculator -->
-    <div class="calc-widget" id="calcWidget">
-        <button class="calc-toggle" onclick="toggleCalc()">
-            <span class="calc-icon">📊</span>
-            <span class="calc-label">Calculator</span>
-        </button>
-        <div class="calc-panel" id="calcPanel">
-            <h3>Yield Calculator</h3>
-            <div class="calc-input">
-                <label>Deposit Amount</label>
-                <div class="input-row">
-                    <span class="currency">$</span>
-                    <input type="number" id="depositAmount" value="10000" min="100">
-                </div>
-            </div>
-            <div class="calc-input">
-                <label>APR: <span id="aprDisplay">12%</span></label>
-                <input type="range" id="aprSlider" min="10" max="15" value="12" step="0.5">
-            </div>
-            <div class="calc-results">
-                <div class="result-item">
-                    <span class="result-label">Monthly</span>
-                    <span class="result-value" id="monthlyYield">+$100</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">Yearly</span>
-                    <span class="result-value highlight" id="yearlyYield">+$1,200</span>
-                </div>
-                <div class="result-item total">
-                    <span class="result-label">Total After 1 Year</span>
-                    <span class="result-value glow" id="totalValue">$11,200</span>
+                <!-- Story Beat 5 -->
+                <div class="story-beat" data-step="5">
+                    <div class="beat-visual">
+                        <div class="solution-reveal">
+                            <div class="old-way">
+                                <div class="way-label">Old: Fixed MBS Pools</div>
+                                <div class="fixed-pools">
+                                    <div class="fixed-pool"></div>
+                                    <div class="fixed-pool"></div>
+                                    <div class="fixed-pool"></div>
+                                </div>
+                            </div>
+                            <div class="vs-divider">vs</div>
+                            <div class="new-way">
+                                <div class="way-label">New: One Evergreen Pool</div>
+                                <div class="evergreen-pool">
+                                    <div class="pool-glow"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="beat-text">
+                        <h2>What if we rebuilt it from scratch?</h2>
+                        <p>Instead of thousands of frozen pools... <strong>one continuous, living instrument</strong>.</p>
+                        <p>Add a GPU loan? APY updates instantly. No waiting. No new pools.</p>
+                        <div class="cta-inline">
+                            <button class="btn-primary" onclick="goToSection('builder')">Try Building a Pool →</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Section 2: Interactive Pool Builder -->
+    <section class="section" id="builder">
+        <div class="builder-container">
+            <div class="builder-header">
+                <div class="chapter-number">Chapter 2</div>
+                <h1>Build Your Own GPU Pool</h1>
+                <p class="builder-subtitle">Drag GPU loans into the pool. Watch how one evergreen instrument works.</p>
+            </div>
+
+            <div class="builder-workspace">
+                <!-- Available GPU Loans -->
+                <div class="loans-panel">
+                    <div class="panel-header">
+                        <h3>Available GPU Loans</h3>
+                        <p class="panel-hint">Drag these into the pool</p>
+                    </div>
+                    <div class="loans-list" id="availableLoans">
+                        <div class="loan-card" draggable="true" data-id="1" data-principal="500000" data-apr="14" data-term="36" data-gpus="50">
+                            <div class="loan-header">
+                                <span class="loan-id">Loan #1</span>
+                                <span class="loan-badge">NVIDIA H100</span>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-stat">
+                                    <span class="stat-label">Principal</span>
+                                    <span class="stat-value">$500K</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">APR</span>
+                                    <span class="stat-value">14%</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">Term</span>
+                                    <span class="stat-value">36 mo</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">GPUs</span>
+                                    <span class="stat-value">50</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loan-card" draggable="true" data-id="2" data-principal="1200000" data-apr="13" data-term="24" data-gpus="120">
+                            <div class="loan-header">
+                                <span class="loan-id">Loan #2</span>
+                                <span class="loan-badge">NVIDIA A100</span>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-stat">
+                                    <span class="stat-label">Principal</span>
+                                    <span class="stat-value">$1.2M</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">APR</span>
+                                    <span class="stat-value">13%</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">Term</span>
+                                    <span class="stat-value">24 mo</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">GPUs</span>
+                                    <span class="stat-value">120</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loan-card" draggable="true" data-id="3" data-principal="800000" data-apr="15" data-term="36" data-gpus="80">
+                            <div class="loan-header">
+                                <span class="loan-id">Loan #3</span>
+                                <span class="loan-badge">NVIDIA H100</span>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-stat">
+                                    <span class="stat-label">Principal</span>
+                                    <span class="stat-value">$800K</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">APR</span>
+                                    <span class="stat-value">15%</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">Term</span>
+                                    <span class="stat-value">36 mo</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">GPUs</span>
+                                    <span class="stat-value">80</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loan-card" draggable="true" data-id="4" data-principal="2000000" data-apr="12" data-term="30" data-gpus="200">
+                            <div class="loan-header">
+                                <span class="loan-id">Loan #4</span>
+                                <span class="loan-badge">NVIDIA H100</span>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-stat">
+                                    <span class="stat-label">Principal</span>
+                                    <span class="stat-value">$2M</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">APR</span>
+                                    <span class="stat-value">12%</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">Term</span>
+                                    <span class="stat-value">30 mo</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">GPUs</span>
+                                    <span class="stat-value">200</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loan-card" draggable="true" data-id="5" data-principal="350000" data-apr="16" data-term="24" data-gpus="35">
+                            <div class="loan-header">
+                                <span class="loan-id">Loan #5</span>
+                                <span class="loan-badge">NVIDIA A100</span>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-stat">
+                                    <span class="stat-label">Principal</span>
+                                    <span class="stat-value">$350K</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">APR</span>
+                                    <span class="stat-value">16%</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">Term</span>
+                                    <span class="stat-value">24 mo</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">GPUs</span>
+                                    <span class="stat-value">35</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loan-card" draggable="true" data-id="6" data-principal="1500000" data-apr="14" data-term="36" data-gpus="150">
+                            <div class="loan-header">
+                                <span class="loan-id">Loan #6</span>
+                                <span class="loan-badge">NVIDIA H100</span>
+                            </div>
+                            <div class="loan-details">
+                                <div class="loan-stat">
+                                    <span class="stat-label">Principal</span>
+                                    <span class="stat-value">$1.5M</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">APR</span>
+                                    <span class="stat-value">14%</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">Term</span>
+                                    <span class="stat-value">36 mo</span>
+                                </div>
+                                <div class="loan-stat">
+                                    <span class="stat-label">GPUs</span>
+                                    <span class="stat-value">150</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Pool -->
+                <div class="pool-panel">
+                    <div class="pool-header">
+                        <h3>The Evergreen Pool</h3>
+                        <p class="panel-hint">One living instrument, instant updates</p>
+                    </div>
+                    <div class="pool-dropzone" id="poolDropzone">
+                        <div class="dropzone-empty" id="dropzoneEmpty">
+                            <div class="empty-icon">
+                                <div class="plus-h"></div>
+                                <div class="plus-v"></div>
+                            </div>
+                            <span>Drop GPU loans here</span>
+                        </div>
+                        <div class="pool-loans" id="poolLoans"></div>
+                    </div>
+                    <div class="pool-stats">
+                        <div class="pool-stat main">
+                            <span class="stat-label">Pool APY</span>
+                            <span class="stat-value" id="poolApy">0%</span>
+                        </div>
+                        <div class="pool-stat">
+                            <span class="stat-label">Total Principal</span>
+                            <span class="stat-value" id="poolPrincipal">$0</span>
+                        </div>
+                        <div class="pool-stat">
+                            <span class="stat-label">Total GPUs</span>
+                            <span class="stat-value" id="poolGpus">0</span>
+                        </div>
+                        <div class="pool-stat">
+                            <span class="stat-label">Avg Term</span>
+                            <span class="stat-value" id="poolTerm">0 mo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation Panel -->
+                <div class="explain-panel">
+                    <div class="explain-header">
+                        <h3>Why This Matters</h3>
+                    </div>
+                    <div class="explain-content" id="explainContent">
+                        <div class="explain-step active" data-step="empty">
+                            <div class="step-icon">
+                                <div class="icon-circle"></div>
+                            </div>
+                            <div class="step-text">
+                                <h4>Start Building</h4>
+                                <p>Drag a GPU loan into the pool to see how the evergreen model works.</p>
+                                <p class="step-detail">Unlike traditional MBS where you need 1000+ loans to create a fixed product, here each loan immediately contributes to one living pool.</p>
+                            </div>
+                        </div>
+                        <div class="explain-step" data-step="first">
+                            <div class="step-icon success">
+                                <div class="icon-check"></div>
+                            </div>
+                            <div class="step-text">
+                                <h4>Instant Contribution</h4>
+                                <p>That loan is now earning yield for the pool. No waiting for a "batch" to close.</p>
+                                <p class="step-detail"><strong>Old way:</strong> Wait 12 months to package enough loans.<br><strong>New way:</strong> Each loan contributes immediately.</p>
+                            </div>
+                        </div>
+                        <div class="explain-step" data-step="multiple">
+                            <div class="step-icon success">
+                                <div class="icon-check"></div>
+                            </div>
+                            <div class="step-text">
+                                <h4>Weighted Average APY</h4>
+                                <p>Notice how the APY updates with each loan? It's a weighted average based on principal.</p>
+                                <p class="step-detail">Bigger loans with higher rates push the APY up. This is <strong>CALIBER</strong> at work—continuous, not batched.</p>
+                            </div>
+                        </div>
+                        <div class="explain-step" data-step="full">
+                            <div class="step-icon success">
+                                <div class="icon-check"></div>
+                            </div>
+                            <div class="step-text">
+                                <h4>The Evergreen Advantage</h4>
+                                <p>You've built a diversified GPU-backed pool. In the old world, this would be 6 separate securities.</p>
+                                <p class="step-detail">Now understand what happens when someone wants out?</p>
+                                <button class="btn-secondary" onclick="goToSection('exit')">Learn About Exits →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Exit Queue Simulator -->
+    <section class="section" id="exit">
+        <div class="exit-container">
+            <div class="exit-header">
+                <div class="chapter-number">Chapter 3</div>
+                <h1>The Exit Queue</h1>
+                <p class="exit-subtitle">GPUs are illiquid. You can't sell them instantly. So how do people exit fairly?</p>
+            </div>
+
+            <div class="exit-intro">
+                <div class="problem-box">
+                    <h3>The Problem</h3>
+                    <p>Unlike stocks, you can't sell a GPU in milliseconds. Loan repayments come in over time.</p>
+                    <p>If everyone rushes for the exit, who gets out first? First-come-first-serve? That's not fair.</p>
+                </div>
+                <div class="solution-box">
+                    <h3>The Solution: QEV</h3>
+                    <p><strong>Queue Extractable Value.</strong> A bidding system for exit priority.</p>
+                    <p>Want out faster? Bid more. The market decides fair pricing, not arbitrary rules.</p>
+                </div>
+            </div>
+
+            <div class="exit-simulator">
+                <div class="sim-header">
+                    <h3>Simulate an Exit Epoch</h3>
+                    <p>This epoch has <strong>$250,000</strong> available for redemptions (from loan repayments)</p>
+                </div>
+
+                <div class="sim-workspace">
+                    <!-- Bidders -->
+                    <div class="bidders-panel">
+                        <div class="panel-header">
+                            <h4>Depositors Wanting Out</h4>
+                        </div>
+                        <div class="bidders-list" id="biddersList">
+                            <div class="bidder-card" data-id="A">
+                                <div class="bidder-header">
+                                    <span class="bidder-name">Depositor A</span>
+                                    <span class="bidder-amount">Wants: $100K</span>
+                                </div>
+                                <div class="bidder-bid">
+                                    <label>Bid (bps)</label>
+                                    <input type="range" class="bid-slider" min="0" max="100" value="50" data-bidder="A">
+                                    <span class="bid-value" id="bidA">50 bps</span>
+                                </div>
+                                <div class="bidder-result">
+                                    <span class="result-label">Gets:</span>
+                                    <span class="result-value" id="resultA">$0</span>
+                                </div>
+                            </div>
+                            <div class="bidder-card" data-id="B">
+                                <div class="bidder-header">
+                                    <span class="bidder-name">Depositor B</span>
+                                    <span class="bidder-amount">Wants: $150K</span>
+                                </div>
+                                <div class="bidder-bid">
+                                    <label>Bid (bps)</label>
+                                    <input type="range" class="bid-slider" min="0" max="100" value="25" data-bidder="B">
+                                    <span class="bid-value" id="bidB">25 bps</span>
+                                </div>
+                                <div class="bidder-result">
+                                    <span class="result-label">Gets:</span>
+                                    <span class="result-value" id="resultB">$0</span>
+                                </div>
+                            </div>
+                            <div class="bidder-card" data-id="C">
+                                <div class="bidder-header">
+                                    <span class="bidder-name">Depositor C</span>
+                                    <span class="bidder-amount">Wants: $200K</span>
+                                </div>
+                                <div class="bidder-bid">
+                                    <label>Bid (bps)</label>
+                                    <input type="range" class="bid-slider" min="0" max="100" value="10" data-bidder="C">
+                                    <span class="bid-value" id="bidC">10 bps</span>
+                                </div>
+                                <div class="bidder-result">
+                                    <span class="result-label">Gets:</span>
+                                    <span class="result-value" id="resultC">$0</span>
+                                </div>
+                            </div>
+                            <div class="bidder-card passive" data-id="D">
+                                <div class="bidder-header">
+                                    <span class="bidder-name">Depositor D</span>
+                                    <span class="bidder-amount passive-badge">Not bidding (stays in pool)</span>
+                                </div>
+                                <div class="bidder-passive">
+                                    <span class="passive-label">Receives bid redistribution</span>
+                                    <span class="passive-value" id="passiveReward">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div class="queue-visual">
+                        <div class="queue-header">
+                            <h4>Liquidity Allocation</h4>
+                            <p>$250,000 available this epoch</p>
+                        </div>
+                        <div class="queue-bar">
+                            <div class="queue-segment" id="segmentA" style="width: 0%">
+                                <span class="segment-label">A</span>
+                            </div>
+                            <div class="queue-segment" id="segmentB" style="width: 0%">
+                                <span class="segment-label">B</span>
+                            </div>
+                            <div class="queue-segment" id="segmentC" style="width: 0%">
+                                <span class="segment-label">C</span>
+                            </div>
+                            <div class="queue-remaining" id="queueRemaining">
+                                <span>Remaining</span>
+                            </div>
+                        </div>
+                        <div class="queue-formula">
+                            <code>Allocation = (Your Bid ÷ Total Bids) × Available Liquidity</code>
+                        </div>
+                    </div>
+
+                    <!-- Explanation -->
+                    <div class="exit-explain">
+                        <div class="explain-box" id="exitExplain">
+                            <h4>How It Works</h4>
+                            <p>Move the bid sliders to see how allocation changes.</p>
+                            <ul>
+                                <li><strong>Higher bid = larger share</strong> of available liquidity</li>
+                                <li><strong>Proportional, not winner-take-all</strong> — everyone gets something relative to their bid</li>
+                                <li><strong>Non-bidders benefit too</strong> — bids get redistributed as rewards</li>
+                            </ul>
+                        </div>
+                        <div class="tier-guide">
+                            <h4>Typical Strategies</h4>
+                            <div class="tier">
+                                <span class="tier-name">Slow (0-10 bps)</span>
+                                <span class="tier-desc">Wait 2-5 epochs, ~25% success rate</span>
+                            </div>
+                            <div class="tier">
+                                <span class="tier-name">Balanced (10-50 bps)</span>
+                                <span class="tier-desc">Wait 1-2 epochs, ~60% success rate</span>
+                            </div>
+                            <div class="tier">
+                                <span class="tier-name">Instant (50-100 bps)</span>
+                                <span class="tier-desc">Same epoch, ~95% success rate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="why-qev">
+                    <h3>Why Build It This Way?</h3>
+                    <div class="why-grid">
+                        <div class="why-item">
+                            <div class="why-title">Prevents Depegging</div>
+                            <p>Dynamic pricing dampens panic. If everyone rushes, bids rise, slowing the exit.</p>
+                        </div>
+                        <div class="why-item">
+                            <div class="why-title">Fair Allocation</div>
+                            <p>No arbitrary "first come first serve." The market decides who values exit most.</p>
+                        </div>
+                        <div class="why-item">
+                            <div class="why-title">Rewards Patience</div>
+                            <p>Non-bidders earn from bids. Staying in the pool is rewarded, not punished.</p>
+                        </div>
+                        <div class="why-item">
+                            <div class="why-title">Predictable</div>
+                            <p>30-day epochs sync with loan repayments. You know when liquidity is coming.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-cta">
+                <h2>Now You Understand USD.AI</h2>
+                <p>An evergreen GPU-backed pool with fair exit mechanics. Not frozen MBS. Not unfair queues.</p>
+                <div class="cta-buttons">
+                    <a href="https://app.usd.ai" target="_blank" class="btn-primary large">Start Earning →</a>
+                    <a href="https://docs.usd.ai" target="_blank" class="btn-secondary large">Read Full Docs</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script src="app.js"></script>
 </body>
