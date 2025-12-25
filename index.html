@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USD.AI Adventure - Learn How Your Money Grows!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="xp-display">
+            <span class="xp-icon">⭐</span>
+            <span id="xpCount">0</span> XP
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-text">
+            <div class="achievement-title">Achievement Unlocked!</div>
+            <div class="achievement-name" id="achievementName"></div>
+        </div>
+    </div>
+
+    <!-- Navigation Dots -->
+    <nav class="nav-dots">
+        <button class="nav-dot active" data-section="0" aria-label="Introduction"></button>
+        <button class="nav-dot" data-section="1" aria-label="Level 1"></button>
+        <button class="nav-dot" data-section="2" aria-label="Level 2"></button>
+        <button class="nav-dot" data-section="3" aria-label="Level 3"></button>
+        <button class="nav-dot" data-section="4" aria-label="Level 4"></button>
+        <button class="nav-dot" data-section="5" aria-label="Quiz"></button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="game-container">
+
+        <!-- Section 0: Welcome -->
+        <section class="game-section active" id="section-0">
+            <div class="section-content">
+                <div class="hero-animation">
+                    <div class="coin-stack">
+                        <div class="coin coin-1">💰</div>
+                        <div class="coin coin-2">💰</div>
+                        <div class="coin coin-3">💰</div>
+                    </div>
+                    <div class="arrow-animation">➡️</div>
+                    <div class="treasure-chest">🏆</div>
+                </div>
+                <h1 class="game-title">USD.AI Adventure</h1>
+                <p class="subtitle">Learn How Your Money Grows!</p>
+                <div class="level-badge">TUTORIAL</div>
+                <p class="intro-text">
+                    Welcome, young investor! Ready to learn how USD.AI helps your money grow like magic?
+                </p>
+                <button class="game-button primary" onclick="nextSection()">
+                    🚀 Start Adventure!
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 1: What is USDai? -->
+        <section class="game-section" id="section-1">
+            <div class="section-content">
+                <div class="level-badge">LEVEL 1</div>
+                <h2>What are Magic Coins? 🪙</h2>
+
+                <div class="concept-card">
+                    <div class="concept-icon floating">🪙</div>
+                    <h3>Meet USDai!</h3>
+                    <p>USDai is like a <strong>magic coin</strong> that's always worth $1.</p>
+                    <p>You can trade your regular dollars (USDC) for these magic coins anytime!</p>
+                </div>
+
+                <div class="interactive-demo" id="mintDemo">
+                    <div class="demo-title">Try it! Click to mint USDai:</div>
+                    <div class="mint-container">
+                        <div class="usdc-pile" id="usdcPile">
+                            <span class="token">$</span>
+                            <span class="token">$</span>
+                            <span class="token">$</span>
+                        </div>
+                        <button class="mint-button" id="mintButton" onclick="mintUSDai()">
+                            ✨ Mint!
+                        </button>
+                        <div class="usdai-pile" id="usdaiPile"></div>
+                    </div>
+                    <div class="demo-result" id="mintResult"></div>
+                </div>
+
+                <div class="key-point">
+                    <span class="key-icon">💡</span>
+                    <span>USDai can ALWAYS be exchanged back for real dollars!</span>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
+                    <button class="game-button primary" onclick="nextSection()">Next Level →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: What is sUSDai? -->
+        <section class="game-section" id="section-2">
+            <div class="section-content">
+                <div class="level-badge">LEVEL 2</div>
+                <h2>The Growing Treasure Chest! 📦</h2>
+
+                <div class="concept-card glow">
+                    <div class="concept-icon bouncing">📦</div>
+                    <h3>Meet sUSDai!</h3>
+                    <p>When you <strong>stake</strong> your USDai, it goes into a magic treasure chest called <strong>sUSDai</strong>.</p>
+                    <p>This chest grows bigger every day - earning <span class="highlight">10-15%</span> more coins each year!</p>
+                </div>
+
+                <div class="interactive-demo" id="stakeDemo">
+                    <div class="demo-title">Watch the magic! Click to stake:</div>
+                    <div class="stake-container">
+                        <div class="usdai-token" id="stakeToken">🪙</div>
+                        <button class="stake-button" id="stakeButton" onclick="stakeUSDai()">
+                            📦 Stake!
+                        </button>
+                        <div class="treasure-box" id="treasureBox">
+                            <div class="chest-lid">📦</div>
+                            <div class="chest-glow"></div>
+                            <div class="yield-counter" id="yieldCounter">+0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-cards">
+                    <div class="compare-card">
+                        <div class="compare-icon">🪙</div>
+                        <div class="compare-title">USDai</div>
+                        <div class="compare-desc">Stays the same</div>
+                    </div>
+                    <div class="vs-badge">VS</div>
+                    <div class="compare-card winner">
+                        <div class="compare-icon">📦</div>
+                        <div class="compare-title">sUSDai</div>
+                        <div class="compare-desc">Grows over time!</div>
+                        <div class="sparkles">✨</div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
+                    <button class="game-button primary" onclick="nextSection()">Next Level →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Where does yield come from? -->
+        <section class="game-section" id="section-3">
+            <div class="section-content">
+                <div class="level-badge">LEVEL 3</div>
+                <h2>The Magic Behind the Growth! 🖥️</h2>
+
+                <div class="concept-card">
+                    <div class="concept-icon pulse">🖥️</div>
+                    <h3>Super Computers (GPUs)</h3>
+                    <p>Your money helps buy <strong>super computers</strong> that help AI robots think!</p>
+                    <p>Companies pay to use these computers, and that money comes back to YOU!</p>
+                </div>
+
+                <div class="flow-diagram">
+                    <div class="flow-step" data-step="1">
+                        <div class="flow-icon">💵</div>
+                        <div class="flow-label">Your Money</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" data-step="2">
+                        <div class="flow-icon">🖥️</div>
+                        <div class="flow-label">Buys GPUs</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" data-step="3">
+                        <div class="flow-icon">🤖</div>
+                        <div class="flow-label">AI Uses Them</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step" data-step="4">
+                        <div class="flow-icon">💰</div>
+                        <div class="flow-label">You Earn!</div>
+                    </div>
+                </div>
+
+                <button class="game-button accent" onclick="animateFlow()">
+                    ▶️ Watch the Flow!
+                </button>
+
+                <div class="fun-fact">
+                    <span class="fact-icon">🎮</span>
+                    <span>GPUs are the same chips used in video games! But these help AI learn and think.</span>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
+                    <button class="game-button primary" onclick="nextSection()">Next Level →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Three Friends -->
+        <section class="game-section" id="section-4">
+            <div class="section-content">
+                <div class="level-badge">LEVEL 4</div>
+                <h2>Meet the Team! 👥</h2>
+
+                <p class="section-intro">Three types of friends work together to make USD.AI work!</p>
+
+                <div class="character-cards">
+                    <div class="character-card" onclick="selectCharacter(this, 'depositor')">
+                        <div class="character-avatar">🧑‍💼</div>
+                        <h3>Depositors</h3>
+                        <p>That's YOU! You put in money and earn yield.</p>
+                        <div class="character-badge">EARN 10-15% APR</div>
+                    </div>
+
+                    <div class="character-card" onclick="selectCharacter(this, 'borrower')">
+                        <div class="character-avatar">🏢</div>
+                        <h3>Borrowers</h3>
+                        <p>Companies that need GPUs. They borrow and pay interest.</p>
+                        <div class="character-badge">USE GPUs</div>
+                    </div>
+
+                    <div class="character-card" onclick="selectCharacter(this, 'curator')">
+                        <div class="character-avatar">🛡️</div>
+                        <h3>Curators</h3>
+                        <p>Guardians who check if borrowers are trustworthy.</p>
+                        <div class="character-badge">PROTECT</div>
+                    </div>
+                </div>
+
+                <div class="character-detail" id="characterDetail">
+                    <p>👆 Click a character to learn more!</p>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
+                    <button class="game-button primary" onclick="nextSection()">Take the Quiz! →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Quiz Time! -->
+        <section class="game-section" id="section-5">
+            <div class="section-content">
+                <div class="level-badge rainbow">FINAL CHALLENGE</div>
+                <h2>Quiz Time! 🎯</h2>
+
+                <div class="quiz-container" id="quizContainer">
+                    <div class="quiz-progress">
+                        Question <span id="questionNum">1</span>/5
+                    </div>
+
+                    <div class="quiz-question" id="quizQuestion">
+                        What is USDai?
+                    </div>
+
+                    <div class="quiz-options" id="quizOptions">
+                        <!-- Options populated by JS -->
+                    </div>
+
+                    <div class="quiz-feedback" id="quizFeedback"></div>
+                </div>
+
+                <div class="quiz-complete" id="quizComplete" style="display: none;">
+                    <div class="trophy-animation">🏆</div>
+                    <h3>Congratulations!</h3>
+                    <p>You scored <span id="finalScore">0</span>/5!</p>
+                    <p class="completion-message" id="completionMessage"></p>
+
+                    <div class="cta-section">
+                        <p>Ready to start your USD.AI journey for real?</p>
+                        <a href="https://app.usd.ai" target="_blank" class="game-button primary large">
+                            🚀 Go to USD.AI App
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="game-button secondary" onclick="prevSection()">← Review Lessons</button>
+                    <button class="game-button secondary" onclick="restartQuiz()" id="restartBtn" style="display: none;">
+                        🔄 Retry Quiz
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Piggy Bank Simulator (Floating Widget) -->
+    <div class="piggy-widget" id="piggyWidget">
+        <button class="piggy-toggle" onclick="togglePiggy()">
+            🐷
+            <span class="piggy-label">Calculator</span>
+        </button>
+        <div class="piggy-panel" id="piggyPanel">
+            <h3>💰 Yield Calculator</h3>
+            <div class="piggy-input">
+                <label>Deposit Amount ($)</label>
+                <input type="number" id="depositAmount" value="1000" min="1">
+            </div>
+            <div class="piggy-input">
+                <label>APR (%)</label>
+                <input type="range" id="aprSlider" min="10" max="15" value="12" step="0.5">
+                <span id="aprDisplay">12%</span>
+            </div>
+            <div class="piggy-result">
+                <div class="result-row">
+                    <span>After 1 Month:</span>
+                    <span id="result1m">$1,010</span>
+                </div>
+                <div class="result-row">
+                    <span>After 1 Year:</span>
+                    <span id="result1y" class="highlight">$1,120</span>
+                </div>
+                <div class="result-row earnings">
+                    <span>Total Earnings:</span>
+                    <span id="resultEarn" class="glow">+$120</span>
+                </div>
+            </div>
+            <button class="game-button small" onclick="animatePiggy()">
+                ✨ Show Growth
+            </button>
+        </div>
+    </div>
+
+    <!-- Achievements Panel -->
+    <div class="achievements-panel" id="achievementsPanel">
+        <button class="achievements-toggle" onclick="toggleAchievements()">
+            🏆 <span id="achievementCount">0</span>/5
+        </button>
+        <div class="achievements-list" id="achievementsList">
+            <h3>Your Achievements</h3>
+            <div class="achievement-item locked" id="ach-start">
+                <span class="ach-icon">🎮</span>
+                <span class="ach-name">Adventure Begins</span>
+            </div>
+            <div class="achievement-item locked" id="ach-mint">
+                <span class="ach-icon">🪙</span>
+                <span class="ach-name">First Mint</span>
+            </div>
+            <div class="achievement-item locked" id="ach-stake">
+                <span class="ach-icon">📦</span>
+                <span class="ach-name">Treasure Hunter</span>
+            </div>
+            <div class="achievement-item locked" id="ach-flow">
+                <span class="ach-icon">🔄</span>
+                <span class="ach-name">Flow Master</span>
+            </div>
+            <div class="achievement-item locked" id="ach-quiz">
+                <span class="ach-icon">🎓</span>
+                <span class="ach-name">USD.AI Expert</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
