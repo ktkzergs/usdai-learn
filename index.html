@@ -3,362 +3,477 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USD.AI Adventure - Learn How Your Money Grows!</title>
+    <title>USD.AI Explained - GPU-Backed Stablecoin for the AI Era</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
-        <div class="xp-display">
-            <span class="xp-icon">⭐</span>
-            <span id="xpCount">0</span> XP
-        </div>
-    </div>
+    <!-- Progress Indicator -->
+    <div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- Achievement Popup -->
-    <div class="achievement-popup" id="achievementPopup">
-        <div class="achievement-icon">🏆</div>
-        <div class="achievement-text">
-            <div class="achievement-title">Achievement Unlocked!</div>
-            <div class="achievement-name" id="achievementName"></div>
-        </div>
-    </div>
+    <!-- Floating CTA -->
+    <a href="https://app.usd.ai" target="_blank" class="floating-cta">
+        <span>Try USD.AI</span>
+        <span class="arrow">→</span>
+    </a>
 
-    <!-- Navigation Dots -->
-    <nav class="nav-dots">
-        <button class="nav-dot active" data-section="0" aria-label="Introduction"></button>
-        <button class="nav-dot" data-section="1" aria-label="Level 1"></button>
-        <button class="nav-dot" data-section="2" aria-label="Level 2"></button>
-        <button class="nav-dot" data-section="3" aria-label="Level 3"></button>
-        <button class="nav-dot" data-section="4" aria-label="Level 4"></button>
-        <button class="nav-dot" data-section="5" aria-label="Quiz"></button>
-    </nav>
+    <!-- Main Scroll Container -->
+    <main class="scroll-container">
 
-    <!-- Main Content -->
-    <main class="game-container">
-
-        <!-- Section 0: Welcome -->
-        <section class="game-section active" id="section-0">
-            <div class="section-content">
-                <div class="hero-animation">
-                    <div class="coin-stack">
-                        <div class="coin coin-1">💰</div>
-                        <div class="coin coin-2">💰</div>
-                        <div class="coin coin-3">💰</div>
-                    </div>
-                    <div class="arrow-animation">➡️</div>
-                    <div class="treasure-chest">🏆</div>
-                </div>
-                <h1 class="game-title">USD.AI Adventure</h1>
-                <p class="subtitle">Learn How Your Money Grows!</p>
-                <div class="level-badge">TUTORIAL</div>
-                <p class="intro-text">
-                    Welcome, young investor! Ready to learn how USD.AI helps your money grow like magic?
-                </p>
-                <button class="game-button primary" onclick="nextSection()">
-                    🚀 Start Adventure!
-                </button>
-            </div>
-        </section>
-
-        <!-- Section 1: What is USDai? -->
-        <section class="game-section" id="section-1">
-            <div class="section-content">
-                <div class="level-badge">LEVEL 1</div>
-                <h2>What are Magic Coins? 🪙</h2>
-
-                <div class="concept-card">
-                    <div class="concept-icon floating">🪙</div>
-                    <h3>Meet USDai!</h3>
-                    <p>USDai is like a <strong>magic coin</strong> that's always worth $1.</p>
-                    <p>You can trade your regular dollars (USDC) for these magic coins anytime!</p>
-                </div>
-
-                <div class="interactive-demo" id="mintDemo">
-                    <div class="demo-title">Try it! Click to mint USDai:</div>
-                    <div class="mint-container">
-                        <div class="usdc-pile" id="usdcPile">
-                            <span class="token">$</span>
-                            <span class="token">$</span>
-                            <span class="token">$</span>
-                        </div>
-                        <button class="mint-button" id="mintButton" onclick="mintUSDai()">
-                            ✨ Mint!
-                        </button>
-                        <div class="usdai-pile" id="usdaiPile"></div>
-                    </div>
-                    <div class="demo-result" id="mintResult"></div>
-                </div>
-
-                <div class="key-point">
-                    <span class="key-icon">💡</span>
-                    <span>USDai can ALWAYS be exchanged back for real dollars!</span>
-                </div>
-
-                <div class="nav-buttons">
-                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
-                    <button class="game-button primary" onclick="nextSection()">Next Level →</button>
+        <!-- SLIDE 1: Hook -->
+        <section class="slide slide-hook">
+            <div class="slide-content">
+                <div class="hook-emoji">🏦</div>
+                <h1>What if I told you...</h1>
+                <p class="hook-text">Banks are just <span class="highlight">mortgage factories</span> with a nice checking account UI?</p>
+                <div class="scroll-hint">
+                    <span>Scroll to learn the secret</span>
+                    <div class="scroll-arrow">↓</div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: What is sUSDai? -->
-        <section class="game-section" id="section-2">
-            <div class="section-content">
-                <div class="level-badge">LEVEL 2</div>
-                <h2>The Growing Treasure Chest! 📦</h2>
-
-                <div class="concept-card glow">
-                    <div class="concept-icon bouncing">📦</div>
-                    <h3>Meet sUSDai!</h3>
-                    <p>When you <strong>stake</strong> your USDai, it goes into a magic treasure chest called <strong>sUSDai</strong>.</p>
-                    <p>This chest grows bigger every day - earning <span class="highlight">10-15%</span> more coins each year!</p>
-                </div>
-
-                <div class="interactive-demo" id="stakeDemo">
-                    <div class="demo-title">Watch the magic! Click to stake:</div>
-                    <div class="stake-container">
-                        <div class="usdai-token" id="stakeToken">🪙</div>
-                        <button class="stake-button" id="stakeButton" onclick="stakeUSDai()">
-                            📦 Stake!
-                        </button>
-                        <div class="treasure-box" id="treasureBox">
-                            <div class="chest-lid">📦</div>
-                            <div class="chest-glow"></div>
-                            <div class="yield-counter" id="yieldCounter">+0%</div>
+        <!-- SLIDE 2: Banks = MBS Factories -->
+        <section class="slide slide-reveal">
+            <div class="slide-content">
+                <div class="comparison-visual">
+                    <div class="reality-box">
+                        <div class="box-label">What you see</div>
+                        <div class="box-icon">🏦</div>
+                        <div class="box-text">Your Bank</div>
+                        <div class="features">
+                            <span>✓ Checking Account</span>
+                            <span>✓ Savings Account</span>
+                            <span>✓ Nice App</span>
+                        </div>
+                    </div>
+                    <div class="equals-sign">=</div>
+                    <div class="reality-box glow">
+                        <div class="box-label">What it actually is</div>
+                        <div class="box-icon">🏭</div>
+                        <div class="box-text">MBS Factory</div>
+                        <div class="features">
+                            <span>📦 Package mortgages</span>
+                            <span>📜 Securitize them</span>
+                            <span>💰 Sell to investors</span>
                         </div>
                     </div>
                 </div>
+                <p class="insight">Your deposits fund mortgages → packaged into securities → sold for profit</p>
+            </div>
+        </section>
 
-                <div class="comparison-cards">
-                    <div class="compare-card">
-                        <div class="compare-icon">🪙</div>
-                        <div class="compare-title">USDai</div>
-                        <div class="compare-desc">Stays the same</div>
+        <!-- SLIDE 3: MBS Explained Simply -->
+        <section class="slide slide-mbs">
+            <div class="slide-content">
+                <h2>MBS = Mortgage-Backed Securities</h2>
+                <div class="simple-flow">
+                    <div class="flow-item">
+                        <div class="flow-icon">🏠🏠🏠</div>
+                        <div class="flow-label">1000s of mortgages</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">📦</div>
+                        <div class="flow-label">Package together</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">📜</div>
+                        <div class="flow-label">Create security</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-icon">💵</div>
+                        <div class="flow-label">Investors buy it</div>
+                    </div>
+                </div>
+                <div class="key-insight">
+                    <span class="bulb">💡</span>
+                    <span>This is how banks make money. You deposit → They lend → Package → Profit.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: The AI Era Problem -->
+        <section class="slide slide-problem">
+            <div class="slide-content">
+                <div class="era-badge">🤖 THE AI ERA</div>
+                <h2>Now there's a new asset class...</h2>
+                <div class="gpu-visual">
+                    <div class="gpu-card">
+                        <div class="gpu-icon">🖥️</div>
+                        <div class="gpu-label">GPUs</div>
+                        <div class="gpu-desc">The computers that power AI</div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat">
+                        <div class="stat-value">$200B+</div>
+                        <div class="stat-label">GPU demand by 2027</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">0%</div>
+                        <div class="stat-label">Bank financed</div>
+                    </div>
+                </div>
+                <p class="problem-text">Banks <span class="red">CAN'T</span> finance GPUs. Here's why...</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Why Banks Can't -->
+        <section class="slide slide-why-not">
+            <div class="slide-content">
+                <h2>Why Banks Can't Finance GPUs</h2>
+                <div class="blocker-list">
+                    <div class="blocker" data-delay="0">
+                        <div class="blocker-icon">⚖️</div>
+                        <div class="blocker-content">
+                            <div class="blocker-title">Basel III Rules</div>
+                            <div class="blocker-desc">GPUs require 100-250% risk weighting. Banks need $10M+ capital per $100M loan.</div>
+                        </div>
+                        <div class="blocker-x">✗</div>
+                    </div>
+                    <div class="blocker" data-delay="1">
+                        <div class="blocker-icon">⏱️</div>
+                        <div class="blocker-content">
+                            <div class="blocker-title">Too Slow</div>
+                            <div class="blocker-desc">12+ months to securitize. New GPU chips come out every 18 months.</div>
+                        </div>
+                        <div class="blocker-x">✗</div>
+                    </div>
+                    <div class="blocker" data-delay="2">
+                        <div class="blocker-icon">📉</div>
+                        <div class="blocker-content">
+                            <div class="blocker-title">Depreciation</div>
+                            <div class="blocker-desc">GPUs lose 40% value in 3 years. Banks can't hold on their books.</div>
+                        </div>
+                        <div class="blocker-x">✗</div>
+                    </div>
+                    <div class="blocker" data-delay="3">
+                        <div class="blocker-icon">❓</div>
+                        <div class="blocker-content">
+                            <div class="blocker-title">No Comparables</div>
+                            <div class="blocker-desc">ChatGPT is only 3 years old. No historical data for risk models.</div>
+                        </div>
+                        <div class="blocker-x">✗</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: The Gap -->
+        <section class="slide slide-gap">
+            <div class="slide-content">
+                <h2>This creates a massive gap</h2>
+                <div class="gap-visual">
+                    <div class="demand-side">
+                        <div class="side-icon">🖥️🖥️🖥️</div>
+                        <div class="side-label">GPU Demand</div>
+                        <div class="side-amount">$200B+</div>
+                    </div>
+                    <div class="gap-space">
+                        <div class="gap-label">THE GAP</div>
+                        <div class="gap-line"></div>
+                    </div>
+                    <div class="supply-side">
+                        <div class="side-icon">🏦</div>
+                        <div class="side-label">Bank Financing</div>
+                        <div class="side-amount red">$0</div>
+                    </div>
+                </div>
+                <p class="gap-text">Who fills this gap? Private credit at <span class="red">18-20% rates</span>.</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Enter USD.AI -->
+        <section class="slide slide-solution">
+            <div class="slide-content">
+                <div class="solution-intro">
+                    <div class="solution-badge">💡 THE SOLUTION</div>
+                    <h2>What if we built an MBS factory...</h2>
+                    <h2 class="gradient-text">...for GPUs?</h2>
+                </div>
+                <div class="usdai-reveal">
+                    <div class="usdai-logo">USD.AI</div>
+                    <p class="usdai-tagline">The GPU-backed stablecoin for the AI era</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: The Comparison -->
+        <section class="slide slide-compare">
+            <div class="slide-content">
+                <h2>Same playbook. Different asset.</h2>
+                <div class="compare-table">
+                    <div class="compare-row header">
+                        <div class="compare-cell"></div>
+                        <div class="compare-cell">🏦 Traditional Bank</div>
+                        <div class="compare-cell highlight">🚀 USD.AI</div>
+                    </div>
+                    <div class="compare-row">
+                        <div class="compare-cell label">Collateral</div>
+                        <div class="compare-cell">Houses 🏠</div>
+                        <div class="compare-cell highlight">GPUs 🖥️</div>
+                    </div>
+                    <div class="compare-row">
+                        <div class="compare-cell label">You Deposit</div>
+                        <div class="compare-cell">USD → Savings</div>
+                        <div class="compare-cell highlight">USDC → USDai</div>
+                    </div>
+                    <div class="compare-row">
+                        <div class="compare-cell label">Yield Product</div>
+                        <div class="compare-cell">CD / Bonds</div>
+                        <div class="compare-cell highlight">sUSDai</div>
+                    </div>
+                    <div class="compare-row">
+                        <div class="compare-cell label">APR</div>
+                        <div class="compare-cell">4-5%</div>
+                        <div class="compare-cell highlight glow">10-15%</div>
+                    </div>
+                    <div class="compare-row">
+                        <div class="compare-cell label">Speed</div>
+                        <div class="compare-cell">12+ months</div>
+                        <div class="compare-cell highlight">Instant ⚡</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: How It Works -->
+        <section class="slide slide-how">
+            <div class="slide-content">
+                <h2>How USD.AI Works</h2>
+                <div class="mechanism-flow">
+                    <div class="mech-step" data-step="1">
+                        <div class="mech-number">1</div>
+                        <div class="mech-icon">💵</div>
+                        <div class="mech-title">You Deposit</div>
+                        <div class="mech-desc">USDC/USDT goes in, you get USDai (always worth $1)</div>
+                    </div>
+                    <div class="mech-arrow">↓</div>
+                    <div class="mech-step" data-step="2">
+                        <div class="mech-number">2</div>
+                        <div class="mech-icon">🖥️</div>
+                        <div class="mech-title">Funds GPUs</div>
+                        <div class="mech-desc">Your money helps buy AI infrastructure. GPUs are the collateral.</div>
+                    </div>
+                    <div class="mech-arrow">↓</div>
+                    <div class="mech-step" data-step="3">
+                        <div class="mech-number">3</div>
+                        <div class="mech-icon">🤖</div>
+                        <div class="mech-title">AI Companies Pay</div>
+                        <div class="mech-desc">Data centers rent GPUs. They pay interest on the loans.</div>
+                    </div>
+                    <div class="mech-arrow">↓</div>
+                    <div class="mech-step" data-step="4">
+                        <div class="mech-number">4</div>
+                        <div class="mech-icon">📈</div>
+                        <div class="mech-title">You Earn Yield</div>
+                        <div class="mech-desc">Stake USDai → sUSDai. Earn 10-15% APR.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: The Two Tokens -->
+        <section class="slide slide-tokens">
+            <div class="slide-content">
+                <h2>Two Tokens, One System</h2>
+                <div class="token-cards">
+                    <div class="token-card usdai">
+                        <div class="token-icon">🪙</div>
+                        <div class="token-name">USDai</div>
+                        <div class="token-type">The Stablecoin</div>
+                        <ul class="token-features">
+                            <li>Always worth $1</li>
+                            <li>Instantly redeemable</li>
+                            <li>No yield (like a checking account)</li>
+                            <li>Liquid - use anywhere</li>
+                        </ul>
+                    </div>
+                    <div class="stake-arrow">
+                        <span>STAKE</span>
+                        <span class="arrow">→</span>
+                    </div>
+                    <div class="token-card susdai glow">
+                        <div class="token-icon">📦</div>
+                        <div class="token-name">sUSDai</div>
+                        <div class="token-type">The Yield Token</div>
+                        <ul class="token-features">
+                            <li>Earns 10-15% APR</li>
+                            <li>Backed by GPU loans</li>
+                            <li>Value grows over time</li>
+                            <li>30-day unstaking</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="token-insight">
+                    <span class="bulb">💡</span>
+                    <span>USDai = Checking Account. sUSDai = High-Yield Savings.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: Why It's Better -->
+        <section class="slide slide-advantage">
+            <div class="slide-content">
+                <h2>Why USD.AI Wins</h2>
+                <div class="advantage-grid">
+                    <div class="advantage-item">
+                        <div class="adv-icon">⚡</div>
+                        <div class="adv-title">No Basel III</div>
+                        <div class="adv-desc">DeFi protocol, not a bank. No regulatory capital requirements.</div>
+                    </div>
+                    <div class="advantage-item">
+                        <div class="adv-icon">🔗</div>
+                        <div class="adv-title">Tokenized Instantly</div>
+                        <div class="adv-desc">On Arbitrum. Origination costs = pennies. Not months.</div>
+                    </div>
+                    <div class="advantage-item">
+                        <div class="adv-icon">💰</div>
+                        <div class="adv-title">Cheaper Capital</div>
+                        <div class="adv-desc">Lend at 12% vs private credit's 18-20%. Better for everyone.</div>
+                    </div>
+                    <div class="advantage-item">
+                        <div class="adv-icon">🛡️</div>
+                        <div class="adv-title">GPU Collateralized</div>
+                        <div class="adv-desc">Real hardware backing. If borrower defaults, seize the GPUs.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 12: The Cost Math -->
+        <section class="slide slide-math">
+            <div class="slide-content">
+                <h2>The Math That Matters</h2>
+                <div class="cost-comparison">
+                    <div class="cost-box bad">
+                        <div class="cost-label">Private Credit</div>
+                        <div class="cost-breakdown">
+                            <div class="cost-line">Base Rate: 13%</div>
+                            <div class="cost-line">+ Management Fee: 1.5%</div>
+                            <div class="cost-line">+ Performance Fee: 15-20%</div>
+                            <div class="cost-total">= 18-20% effective rate</div>
+                        </div>
+                        <div class="verdict">❌ Expensive</div>
                     </div>
                     <div class="vs-badge">VS</div>
-                    <div class="compare-card winner">
-                        <div class="compare-icon">📦</div>
-                        <div class="compare-title">sUSDai</div>
-                        <div class="compare-desc">Grows over time!</div>
-                        <div class="sparkles">✨</div>
+                    <div class="cost-box good">
+                        <div class="cost-label">USD.AI</div>
+                        <div class="cost-breakdown">
+                            <div class="cost-line">20% USDai (0% cost)</div>
+                            <div class="cost-line">+ 80% sUSDai</div>
+                            <div class="cost-line">= Blended lower rate</div>
+                            <div class="cost-total">= 10-12% effective rate</div>
+                        </div>
+                        <div class="verdict">✓ Cheaper</div>
                     </div>
                 </div>
+                <p class="math-insight">Free float of USDai subsidizes borrower rates. Everyone wins.</p>
+            </div>
+        </section>
 
-                <div class="nav-buttons">
-                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
-                    <button class="game-button primary" onclick="nextSection()">Next Level →</button>
+        <!-- SLIDE 13: Summary -->
+        <section class="slide slide-summary">
+            <div class="slide-content">
+                <h2>TL;DR</h2>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="sum-icon">🏦</div>
+                        <div class="sum-text">Banks = MBS factories for houses</div>
+                    </div>
+                    <div class="summary-card highlight">
+                        <div class="sum-icon">🚀</div>
+                        <div class="sum-text">USD.AI = MBS factory for GPUs</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="sum-icon">🤖</div>
+                        <div class="sum-text">Built for the AI era's speed</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="sum-icon">💰</div>
+                        <div class="sum-text">Earn 10-15% APR on your stables</div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Where does yield come from? -->
-        <section class="game-section" id="section-3">
-            <div class="section-content">
-                <div class="level-badge">LEVEL 3</div>
-                <h2>The Magic Behind the Growth! 🖥️</h2>
-
-                <div class="concept-card">
-                    <div class="concept-icon pulse">🖥️</div>
-                    <h3>Super Computers (GPUs)</h3>
-                    <p>Your money helps buy <strong>super computers</strong> that help AI robots think!</p>
-                    <p>Companies pay to use these computers, and that money comes back to YOU!</p>
-                </div>
-
-                <div class="flow-diagram">
-                    <div class="flow-step" data-step="1">
-                        <div class="flow-icon">💵</div>
-                        <div class="flow-label">Your Money</div>
+        <!-- SLIDE 14: CTA -->
+        <section class="slide slide-cta">
+            <div class="slide-content">
+                <div class="cta-content">
+                    <h2>Ready to earn yield from the AI revolution?</h2>
+                    <div class="cta-steps">
+                        <div class="cta-step">
+                            <span class="step-num">1</span>
+                            <span>Deposit USDC</span>
+                        </div>
+                        <div class="cta-arrow">→</div>
+                        <div class="cta-step">
+                            <span class="step-num">2</span>
+                            <span>Get USDai</span>
+                        </div>
+                        <div class="cta-arrow">→</div>
+                        <div class="cta-step">
+                            <span class="step-num">3</span>
+                            <span>Stake for sUSDai</span>
+                        </div>
+                        <div class="cta-arrow">→</div>
+                        <div class="cta-step glow">
+                            <span class="step-num">4</span>
+                            <span>Earn 10-15%</span>
+                        </div>
                     </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-step" data-step="2">
-                        <div class="flow-icon">🖥️</div>
-                        <div class="flow-label">Buys GPUs</div>
+                    <a href="https://app.usd.ai" target="_blank" class="big-cta">
+                        Start Earning Now →
+                    </a>
+                    <div class="cta-links">
+                        <a href="https://docs.usd.ai" target="_blank">Read Docs</a>
+                        <a href="https://t.me/usdaiofficial" target="_blank">Join Telegram</a>
+                        <a href="https://x.com/USDai_Official" target="_blank">Follow on X</a>
                     </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-step" data-step="3">
-                        <div class="flow-icon">🤖</div>
-                        <div class="flow-label">AI Uses Them</div>
-                    </div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-step" data-step="4">
-                        <div class="flow-icon">💰</div>
-                        <div class="flow-label">You Earn!</div>
-                    </div>
-                </div>
-
-                <button class="game-button accent" onclick="animateFlow()">
-                    ▶️ Watch the Flow!
-                </button>
-
-                <div class="fun-fact">
-                    <span class="fact-icon">🎮</span>
-                    <span>GPUs are the same chips used in video games! But these help AI learn and think.</span>
-                </div>
-
-                <div class="nav-buttons">
-                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
-                    <button class="game-button primary" onclick="nextSection()">Next Level →</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 4: The Three Friends -->
-        <section class="game-section" id="section-4">
-            <div class="section-content">
-                <div class="level-badge">LEVEL 4</div>
-                <h2>Meet the Team! 👥</h2>
-
-                <p class="section-intro">Three types of friends work together to make USD.AI work!</p>
-
-                <div class="character-cards">
-                    <div class="character-card" onclick="selectCharacter(this, 'depositor')">
-                        <div class="character-avatar">🧑‍💼</div>
-                        <h3>Depositors</h3>
-                        <p>That's YOU! You put in money and earn yield.</p>
-                        <div class="character-badge">EARN 10-15% APR</div>
-                    </div>
-
-                    <div class="character-card" onclick="selectCharacter(this, 'borrower')">
-                        <div class="character-avatar">🏢</div>
-                        <h3>Borrowers</h3>
-                        <p>Companies that need GPUs. They borrow and pay interest.</p>
-                        <div class="character-badge">USE GPUs</div>
-                    </div>
-
-                    <div class="character-card" onclick="selectCharacter(this, 'curator')">
-                        <div class="character-avatar">🛡️</div>
-                        <h3>Curators</h3>
-                        <p>Guardians who check if borrowers are trustworthy.</p>
-                        <div class="character-badge">PROTECT</div>
-                    </div>
-                </div>
-
-                <div class="character-detail" id="characterDetail">
-                    <p>👆 Click a character to learn more!</p>
-                </div>
-
-                <div class="nav-buttons">
-                    <button class="game-button secondary" onclick="prevSection()">← Back</button>
-                    <button class="game-button primary" onclick="nextSection()">Take the Quiz! →</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 5: Quiz Time! -->
-        <section class="game-section" id="section-5">
-            <div class="section-content">
-                <div class="level-badge rainbow">FINAL CHALLENGE</div>
-                <h2>Quiz Time! 🎯</h2>
-
-                <div class="quiz-container" id="quizContainer">
-                    <div class="quiz-progress">
-                        Question <span id="questionNum">1</span>/5
-                    </div>
-
-                    <div class="quiz-question" id="quizQuestion">
-                        What is USDai?
-                    </div>
-
-                    <div class="quiz-options" id="quizOptions">
-                        <!-- Options populated by JS -->
-                    </div>
-
-                    <div class="quiz-feedback" id="quizFeedback"></div>
-                </div>
-
-                <div class="quiz-complete" id="quizComplete" style="display: none;">
-                    <div class="trophy-animation">🏆</div>
-                    <h3>Congratulations!</h3>
-                    <p>You scored <span id="finalScore">0</span>/5!</p>
-                    <p class="completion-message" id="completionMessage"></p>
-
-                    <div class="cta-section">
-                        <p>Ready to start your USD.AI journey for real?</p>
-                        <a href="https://app.usd.ai" target="_blank" class="game-button primary large">
-                            🚀 Go to USD.AI App
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-buttons">
-                    <button class="game-button secondary" onclick="prevSection()">← Review Lessons</button>
-                    <button class="game-button secondary" onclick="restartQuiz()" id="restartBtn" style="display: none;">
-                        🔄 Retry Quiz
-                    </button>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Piggy Bank Simulator (Floating Widget) -->
-    <div class="piggy-widget" id="piggyWidget">
-        <button class="piggy-toggle" onclick="togglePiggy()">
-            🐷
-            <span class="piggy-label">Calculator</span>
+    <!-- Floating Yield Calculator -->
+    <div class="calc-widget" id="calcWidget">
+        <button class="calc-toggle" onclick="toggleCalc()">
+            <span class="calc-icon">📊</span>
+            <span class="calc-label">Calculator</span>
         </button>
-        <div class="piggy-panel" id="piggyPanel">
-            <h3>💰 Yield Calculator</h3>
-            <div class="piggy-input">
-                <label>Deposit Amount ($)</label>
-                <input type="number" id="depositAmount" value="1000" min="1">
+        <div class="calc-panel" id="calcPanel">
+            <h3>Yield Calculator</h3>
+            <div class="calc-input">
+                <label>Deposit Amount</label>
+                <div class="input-row">
+                    <span class="currency">$</span>
+                    <input type="number" id="depositAmount" value="10000" min="100">
+                </div>
             </div>
-            <div class="piggy-input">
-                <label>APR (%)</label>
+            <div class="calc-input">
+                <label>APR: <span id="aprDisplay">12%</span></label>
                 <input type="range" id="aprSlider" min="10" max="15" value="12" step="0.5">
-                <span id="aprDisplay">12%</span>
             </div>
-            <div class="piggy-result">
-                <div class="result-row">
-                    <span>After 1 Month:</span>
-                    <span id="result1m">$1,010</span>
+            <div class="calc-results">
+                <div class="result-item">
+                    <span class="result-label">Monthly</span>
+                    <span class="result-value" id="monthlyYield">+$100</span>
                 </div>
-                <div class="result-row">
-                    <span>After 1 Year:</span>
-                    <span id="result1y" class="highlight">$1,120</span>
+                <div class="result-item">
+                    <span class="result-label">Yearly</span>
+                    <span class="result-value highlight" id="yearlyYield">+$1,200</span>
                 </div>
-                <div class="result-row earnings">
-                    <span>Total Earnings:</span>
-                    <span id="resultEarn" class="glow">+$120</span>
+                <div class="result-item total">
+                    <span class="result-label">Total After 1 Year</span>
+                    <span class="result-value glow" id="totalValue">$11,200</span>
                 </div>
-            </div>
-            <button class="game-button small" onclick="animatePiggy()">
-                ✨ Show Growth
-            </button>
-        </div>
-    </div>
-
-    <!-- Achievements Panel -->
-    <div class="achievements-panel" id="achievementsPanel">
-        <button class="achievements-toggle" onclick="toggleAchievements()">
-            🏆 <span id="achievementCount">0</span>/5
-        </button>
-        <div class="achievements-list" id="achievementsList">
-            <h3>Your Achievements</h3>
-            <div class="achievement-item locked" id="ach-start">
-                <span class="ach-icon">🎮</span>
-                <span class="ach-name">Adventure Begins</span>
-            </div>
-            <div class="achievement-item locked" id="ach-mint">
-                <span class="ach-icon">🪙</span>
-                <span class="ach-name">First Mint</span>
-            </div>
-            <div class="achievement-item locked" id="ach-stake">
-                <span class="ach-icon">📦</span>
-                <span class="ach-name">Treasure Hunter</span>
-            </div>
-            <div class="achievement-item locked" id="ach-flow">
-                <span class="ach-icon">🔄</span>
-                <span class="ach-name">Flow Master</span>
-            </div>
-            <div class="achievement-item locked" id="ach-quiz">
-                <span class="ach-icon">🎓</span>
-                <span class="ach-name">USD.AI Expert</span>
             </div>
         </div>
     </div>
