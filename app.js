@@ -1,4 +1,4 @@
-// USD.AI Sandbox - Interactive Learning
+// USD.AI Interactive Learning - Complete JavaScript
 
 // ==================== NAVIGATION ====================
 
@@ -28,246 +28,459 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
     });
 });
 
-// ==================== POOL BUILDER ====================
+// ==================== CHAPTER 1: STORY NAVIGATION ====================
 
-const poolState = {
-    loans: [],
-    totalPrincipal: 0,
-    totalGpus: 0,
-    weightedApr: 0,
-    avgTerm: 0
-};
-
-// Drag and Drop
-function initDragDrop() {
-    const loanCards = document.querySelectorAll('.loan-card');
-    const dropzone = document.getElementById('poolDropzone');
-
-    loanCards.forEach(card => {
-        card.addEventListener('dragstart', handleDragStart);
-        card.addEventListener('dragend', handleDragEnd);
+function nextScene(sceneNumber) {
+    // Hide all scenes
+    document.querySelectorAll('.story-scene').forEach(scene => {
+        scene.classList.add('hidden');
     });
 
-    dropzone.addEventListener('dragover', handleDragOver);
-    dropzone.addEventListener('dragleave', handleDragLeave);
-    dropzone.addEventListener('drop', handleDrop);
-}
-
-function handleDragStart(e) {
-    e.target.classList.add('dragging');
-    e.dataTransfer.setData('text/plain', e.target.dataset.id);
-    e.dataTransfer.effectAllowed = 'move';
-}
-
-function handleDragEnd(e) {
-    e.target.classList.remove('dragging');
-}
-
-function handleDragOver(e) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    document.getElementById('poolDropzone').classList.add('dragover');
-}
-
-function handleDragLeave(e) {
-    document.getElementById('poolDropzone').classList.remove('dragover');
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    document.getElementById('poolDropzone').classList.remove('dragover');
-
-    const loanId = e.dataTransfer.getData('text/plain');
-    const loanCard = document.querySelector(`.loan-card[data-id="${loanId}"]`);
-
-    if (loanCard && !poolState.loans.find(l => l.id === loanId)) {
-        addLoanToPool(loanCard);
+    // Show target scene
+    const targetScene = document.getElementById('scene' + sceneNumber);
+    if (targetScene) {
+        targetScene.classList.remove('hidden');
     }
+}
+
+// ==================== CHAPTER 2: POOL BUILDER ====================
+
+const poolBuilderState = {
+    totalPoolSize: 10000000, // $10M base pool
+    tbillApr: 5.0,           // T-bill base rate
+    loans: [],               // Added GPU loans
+    gpuLoanTotal: 0,         // Total GPU loan amount
+    blendedApy: 5.0          // Current blended APY
+};
+
+function initPoolBuilder() {
+    // Add click handlers to all loan cards
+    document.querySelectorAll('.gpu-loan .add-loan-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const card = e.target.closest('.gpu-loan');
+            if (!card.classList.contains('added')) {
+                addLoanToPool(card);
+            }
+        });
+    });
+
+    // Initial state
+    updatePoolDisplay();
 }
 
 function addLoanToPool(card) {
     const loan = {
         id: card.dataset.id,
-        principal: parseInt(card.dataset.principal),
+        amount: parseInt(card.dataset.amount),
         apr: parseInt(card.dataset.apr),
-        term: parseInt(card.dataset.term),
         gpus: parseInt(card.dataset.gpus)
     };
 
-    poolState.loans.push(loan);
+    poolBuilderState.loans.push(loan);
+    poolBuilderState.gpuLoanTotal += loan.amount;
 
-    // Hide from available list
-    card.style.display = 'none';
+    // Mark card as added
+    card.classList.add('added');
+    card.querySelector('.add-loan-btn').textContent = 'Added';
 
-    // Add chip to pool
-    const chip = document.createElement('div');
-    chip.className = 'pool-loan-chip';
-    chip.textContent = `Loan #${loan.id} • $${(loan.principal / 1000).toFixed(0)}K • ${loan.apr}%`;
-    document.getElementById('poolLoans').appendChild(chip);
-
-    // Hide empty state
-    document.getElementById('dropzoneEmpty').style.display = 'none';
-
-    // Update stats
-    updatePoolStats();
-
-    // Update explanation
-    updateExplanation();
+    // Update display
+    updatePoolDisplay();
 }
 
-function updatePoolStats() {
-    if (poolState.loans.length === 0) {
-        document.getElementById('poolApy').textContent = '0%';
-        document.getElementById('poolPrincipal').textContent = '$0';
-        document.getElementById('poolGpus').textContent = '0';
-        document.getElementById('poolTerm').textContent = '0 mo';
-        return;
+function updatePoolDisplay() {
+    const { totalPoolSize, tbillApr, gpuLoanTotal, loans } = poolBuilderState;
+
+    // Calculate T-bill portion (remaining after GPU loans)
+    const tbillPortion = Math.max(0, totalPoolSize - gpuLoanTotal);
+    const gpuPortion = Math.min(gpuLoanTotal, totalPoolSize);
+
+    // Calculate percentages
+    const tbillPct = (tbillPortion / totalPoolSize) * 100;
+    const gpuPct = (gpuPortion / totalPoolSize) * 100;
+
+    // Calculate weighted average APY
+    let weightedApr = 0;
+    if (gpuLoanTotal > 0) {
+        // Weighted sum of GPU loan APRs
+        const gpuWeightedSum = loans.reduce((sum, l) => sum + (l.apr * l.amount), 0);
+        const avgGpuApr = gpuWeightedSum / gpuLoanTotal;
+
+        // Blend with T-bill rate
+        weightedApr = ((tbillPortion * tbillApr) + (gpuPortion * avgGpuApr)) / totalPoolSize;
+    } else {
+        weightedApr = tbillApr;
     }
 
-    // Calculate totals
-    poolState.totalPrincipal = poolState.loans.reduce((sum, l) => sum + l.principal, 0);
-    poolState.totalGpus = poolState.loans.reduce((sum, l) => sum + l.gpus, 0);
+    poolBuilderState.blendedApy = weightedApr;
 
-    // Weighted average APR
-    const weightedSum = poolState.loans.reduce((sum, l) => sum + (l.apr * l.principal), 0);
-    poolState.weightedApr = weightedSum / poolState.totalPrincipal;
+    // Update meter bar
+    document.getElementById('meterTbill').style.width = tbillPct + '%';
+    document.getElementById('meterGpu').style.width = gpuPct + '%';
 
-    // Average term
-    poolState.avgTerm = poolState.loans.reduce((sum, l) => sum + l.term, 0) / poolState.loans.length;
+    // Update text inside meter bars
+    const tbillLabel = document.querySelector('#meterTbill span');
+    const gpuLabel = document.querySelector('#meterGpu span');
+    if (tbillLabel) tbillLabel.textContent = tbillPct > 20 ? 'T-Bills' : '';
+    if (gpuLabel) gpuLabel.textContent = gpuPct > 20 ? 'GPU Loans' : '';
 
-    // Update UI with animation
-    animateValue('poolApy', poolState.weightedApr.toFixed(1) + '%');
-    document.getElementById('poolPrincipal').textContent = '$' + (poolState.totalPrincipal / 1000000).toFixed(1) + 'M';
-    document.getElementById('poolGpus').textContent = poolState.totalGpus.toLocaleString();
-    document.getElementById('poolTerm').textContent = Math.round(poolState.avgTerm) + ' mo';
-}
+    // Update yield display with animation
+    const yieldEl = document.getElementById('blendedApy');
+    yieldEl.style.transform = 'scale(1.1)';
+    yieldEl.textContent = weightedApr.toFixed(1) + '%';
+    setTimeout(() => { yieldEl.style.transform = 'scale(1)'; }, 200);
 
-function animateValue(elementId, newValue) {
-    const el = document.getElementById(elementId);
-    el.style.transform = 'scale(1.2)';
-    el.style.color = '#22c55e';
-    el.textContent = newValue;
+    // Update breakdown
+    document.getElementById('tbillPortion').textContent =
+        `$${(tbillPortion / 1000000).toFixed(1)}M (${tbillPct.toFixed(0)}%)`;
+    document.getElementById('gpuPortion').textContent =
+        `$${(gpuPortion / 1000000).toFixed(1)}M (${gpuPct.toFixed(0)}%)`;
+    document.getElementById('totalPool').textContent =
+        `$${(totalPoolSize / 1000000).toFixed(0)}M`;
 
-    setTimeout(() => {
-        el.style.transform = 'scale(1)';
-    }, 200);
-
-    setTimeout(() => {
-        el.style.color = '';
-    }, 500);
-}
-
-function updateExplanation() {
-    const steps = document.querySelectorAll('.explain-step');
-    steps.forEach(step => step.classList.remove('active'));
-
-    let stepToShow = 'empty';
-    if (poolState.loans.length === 1) {
-        stepToShow = 'first';
-    } else if (poolState.loans.length >= 2 && poolState.loans.length < 6) {
-        stepToShow = 'multiple';
-    } else if (poolState.loans.length >= 6) {
-        stepToShow = 'full';
+    // Update explanation text
+    const explainText = document.getElementById('poolExplainText');
+    if (loans.length === 0) {
+        explainText.textContent = "Your pool starts 100% in T-bills earning ~5% APY. Click 'Add to Pool' on GPU loans to see how the blended APY increases.";
+    } else if (gpuPct < 50) {
+        explainText.textContent = `With ${gpuPct.toFixed(0)}% deployed to GPU loans, your blended APY is now ${weightedApr.toFixed(1)}%. Keep adding loans to increase yield further.`;
+    } else if (gpuPct < 100) {
+        explainText.textContent = `Excellent! ${gpuPct.toFixed(0)}% is now earning GPU loan rates. Your blended APY of ${weightedApr.toFixed(1)}% is significantly higher than T-bills alone.`;
+    } else {
+        explainText.textContent = `Pool is fully deployed to GPU loans. Maximum blended APY achieved at ${weightedApr.toFixed(1)}%!`;
     }
-
-    document.querySelector(`.explain-step[data-step="${stepToShow}"]`).classList.add('active');
 }
 
-// ==================== QEV EXIT SIMULATOR ====================
+// ==================== CHAPTER 4: EXIT QUEUE SIMULATOR ====================
 
-const qevState = {
-    availableLiquidity: 250000,
-    bidders: {
-        A: { wants: 100000, bid: 50 },
-        B: { wants: 150000, bid: 25 },
-        C: { wants: 200000, bid: 10 }
-    }
+const epochState = {
+    currentEpoch: 1,
+    baseLiquidity: 250000,
+    liquidity: 250000,
+    depositors: {
+        alice: { balance: 500000, withdraw: 0, bid: 30, queued: 0, received: 0 },
+        bob: { balance: 300000, withdraw: 0, bid: 50, queued: 0, received: 0 }
+    },
+    carol: { balance: 1000000, reward: 0, extraYield: 0 },
+    history: []
 };
 
-function initQevSimulator() {
-    const sliders = document.querySelectorAll('.bid-slider');
-    sliders.forEach(slider => {
-        slider.addEventListener('input', (e) => {
-            const bidder = e.target.dataset.bidder;
-            const value = parseInt(e.target.value);
-            qevState.bidders[bidder].bid = value;
-            document.getElementById(`bid${bidder}`).textContent = value + ' bps';
-            calculateQevAllocations();
+function initExitSimulator() {
+    // Withdraw input handlers
+    document.querySelectorAll('.withdraw-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const depositor = e.target.closest('.depositor');
+            const id = depositor.dataset.id;
+            const name = id === '1' ? 'alice' : 'bob';
+            epochState.depositors[name].withdraw = parseInt(e.target.value) || 0;
+            calculateEpochAllocations();
         });
     });
 
+    // Bid slider handlers
+    document.querySelectorAll('.bid-range').forEach(slider => {
+        slider.addEventListener('input', (e) => {
+            const depositor = e.target.closest('.depositor');
+            const id = depositor.dataset.id;
+            const name = id === '1' ? 'alice' : 'bob';
+            const value = parseInt(e.target.value);
+            epochState.depositors[name].bid = value;
+            depositor.querySelector('.bid-display').textContent = value;
+            calculateEpochAllocations();
+        });
+    });
+
+    // Advance epoch button
+    document.getElementById('advanceEpoch').addEventListener('click', advanceEpoch);
+
     // Initial calculation
-    calculateQevAllocations();
+    calculateEpochAllocations();
 }
 
-function calculateQevAllocations() {
-    const { A, B, C } = qevState.bidders;
+function calculateEpochAllocations() {
+    const { alice, bob } = epochState.depositors;
+    const { liquidity } = epochState;
 
-    // Total bids
-    const totalBids = A.bid + B.bid + C.bid;
+    // Get requested amounts (either new request or queued from previous)
+    const aliceRequest = alice.withdraw + alice.queued;
+    const bobRequest = bob.withdraw + bob.queued;
+    const totalRequest = aliceRequest + bobRequest;
 
-    if (totalBids === 0) {
-        // No bids, no allocation
-        updateQevUI(0, 0, 0, 0);
+    // Reset current epoch results
+    alice.received = 0;
+    bob.received = 0;
+
+    if (totalRequest === 0 || liquidity === 0) {
+        updateExitUI();
         return;
     }
 
-    // Calculate proportional allocations
-    const allocA = (A.bid / totalBids) * qevState.availableLiquidity;
-    const allocB = (B.bid / totalBids) * qevState.availableLiquidity;
-    const allocC = (C.bid / totalBids) * qevState.availableLiquidity;
+    // Calculate bid-weighted allocations
+    const totalBidWeight = (alice.bid * aliceRequest) + (bob.bid * bobRequest);
 
-    // Cap at what they want
-    const finalA = Math.min(allocA, A.wants);
-    const finalB = Math.min(allocB, B.wants);
-    const finalC = Math.min(allocC, C.wants);
+    if (totalBidWeight === 0) {
+        // Pro-rata if no bids
+        alice.received = Math.min(aliceRequest, (aliceRequest / totalRequest) * liquidity);
+        bob.received = Math.min(bobRequest, (bobRequest / totalRequest) * liquidity);
+    } else {
+        // Bid-weighted allocation
+        const aliceWeight = (alice.bid * aliceRequest) / totalBidWeight;
+        const bobWeight = (bob.bid * bobRequest) / totalBidWeight;
 
-    // Calculate passive reward (simplified: 10% of total bids go to passive holders)
-    const totalBidValue = (A.bid * finalA / 10000) + (B.bid * finalB / 10000) + (C.bid * finalC / 10000);
-    const passiveReward = totalBidValue * 0.1;
+        alice.received = Math.min(aliceRequest, aliceWeight * liquidity);
+        bob.received = Math.min(bobRequest, bobWeight * liquidity);
+    }
 
-    updateQevUI(finalA, finalB, finalC, passiveReward);
+    // Calculate remaining queue
+    alice.queued = Math.max(0, aliceRequest - alice.received);
+    bob.queued = Math.max(0, bobRequest - bob.received);
+
+    // Calculate bid fee redistribution to Carol (stayer)
+    const aliceFee = (alice.bid / 10000) * alice.received;
+    const bobFee = (bob.bid / 10000) * bob.received;
+    epochState.carol.reward = aliceFee + bobFee;
+
+    // Extra yield from reduced pool size
+    const totalExited = alice.received + bob.received;
+    if (totalExited > 0) {
+        epochState.carol.extraYield = (totalExited / epochState.carol.balance) * 0.5; // Simplified calculation
+    }
+
+    updateExitUI();
 }
 
-function updateQevUI(allocA, allocB, allocC, passiveReward) {
-    // Update result values
-    document.getElementById('resultA').textContent = '$' + Math.round(allocA).toLocaleString();
-    document.getElementById('resultB').textContent = '$' + Math.round(allocB).toLocaleString();
-    document.getElementById('resultC').textContent = '$' + Math.round(allocC).toLocaleString();
-    document.getElementById('passiveReward').textContent = '$' + Math.round(passiveReward).toLocaleString();
+function updateExitUI() {
+    const { alice, bob } = epochState.depositors;
+    const { carol, liquidity } = epochState;
 
-    // Update bar segments
-    const total = qevState.availableLiquidity;
-    const pctA = (allocA / total) * 100;
-    const pctB = (allocB / total) * 100;
-    const pctC = (allocC / total) * 100;
+    // Update Alice
+    const aliceCard = document.querySelector('.depositor[data-id="1"]');
+    aliceCard.querySelector('.result-amount').textContent = '$' + Math.round(alice.received).toLocaleString();
+    aliceCard.querySelector('.queue-amount').textContent = '$' + Math.round(alice.queued).toLocaleString();
 
-    document.getElementById('segmentA').style.width = pctA + '%';
-    document.getElementById('segmentB').style.width = pctB + '%';
-    document.getElementById('segmentC').style.width = pctC + '%';
+    // Update Bob
+    const bobCard = document.querySelector('.depositor[data-id="2"]');
+    bobCard.querySelector('.result-amount').textContent = '$' + Math.round(bob.received).toLocaleString();
+    bobCard.querySelector('.queue-amount').textContent = '$' + Math.round(bob.queued).toLocaleString();
 
-    // Show/hide labels based on width
-    document.querySelector('#segmentA .segment-label').style.opacity = pctA > 10 ? 1 : 0;
-    document.querySelector('#segmentB .segment-label').style.opacity = pctB > 10 ? 1 : 0;
-    document.querySelector('#segmentC .segment-label').style.opacity = pctC > 10 ? 1 : 0;
+    // Update Carol (stayer)
+    document.getElementById('carolReward').textContent = '$' + Math.round(carol.reward).toLocaleString();
+    document.getElementById('carolExtraYield').textContent = '+' + carol.extraYield.toFixed(2) + '%';
+
+    // Update queue bar visualization
+    const queueBar = document.getElementById('queueBar');
+    queueBar.innerHTML = '';
+
+    const alicePct = (alice.received / liquidity) * 100;
+    const bobPct = (bob.received / liquidity) * 100;
+    const remainingPct = 100 - alicePct - bobPct;
+
+    if (alicePct > 0) {
+        const aliceSeg = document.createElement('div');
+        aliceSeg.className = 'queue-segment alice';
+        aliceSeg.style.width = alicePct + '%';
+        aliceSeg.innerHTML = alicePct > 15 ? '<span>Alice</span>' : '';
+        queueBar.appendChild(aliceSeg);
+    }
+
+    if (bobPct > 0) {
+        const bobSeg = document.createElement('div');
+        bobSeg.className = 'queue-segment bob';
+        bobSeg.style.width = bobPct + '%';
+        bobSeg.innerHTML = bobPct > 15 ? '<span>Bob</span>' : '';
+        queueBar.appendChild(bobSeg);
+    }
+
+    if (remainingPct > 0) {
+        const remainSeg = document.createElement('div');
+        remainSeg.className = 'queue-segment remaining';
+        remainSeg.style.width = remainingPct + '%';
+        remainSeg.innerHTML = remainingPct > 20 ? '<span>Unused</span>' : '';
+        queueBar.appendChild(remainSeg);
+    }
+}
+
+function advanceEpoch() {
+    const { alice, bob } = epochState.depositors;
+    const { carol } = epochState;
+
+    // Record history
+    epochState.history.push({
+        epoch: epochState.currentEpoch,
+        distributed: alice.received + bob.received,
+        toStayers: carol.reward
+    });
+
+    // Update balances
+    alice.balance -= alice.received;
+    bob.balance -= bob.received;
+
+    // Reset for next epoch
+    alice.withdraw = 0;
+    alice.received = 0;
+    bob.withdraw = 0;
+    bob.received = 0;
+    carol.reward = 0;
+    carol.extraYield = 0;
+
+    // Advance epoch
+    epochState.currentEpoch++;
+
+    // Generate new liquidity (randomized for simulation)
+    epochState.liquidity = 200000 + Math.floor(Math.random() * 100000);
+
+    // Update UI
+    document.getElementById('currentEpoch').textContent = epochState.currentEpoch;
+    document.getElementById('epochLiquidity').textContent = '$' + epochState.liquidity.toLocaleString();
+
+    // Update epoch date
+    const startDay = (epochState.currentEpoch - 1) * 30 + 1;
+    const endDay = epochState.currentEpoch * 30;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const startMonth = months[Math.floor((startDay - 1) / 30) % 12];
+    const endMonth = months[Math.floor((endDay - 1) / 30) % 12];
+    document.getElementById('epochDate').textContent = `${startMonth} ${((startDay - 1) % 30) + 1} - ${endMonth} ${((endDay - 1) % 30) + 1}`;
+
+    // Update balance displays
+    document.querySelector('.depositor[data-id="1"] .dep-balance').textContent = 'Balance: $' + alice.balance.toLocaleString();
+    document.querySelector('.depositor[data-id="2"] .dep-balance').textContent = 'Balance: $' + bob.balance.toLocaleString();
+
+    // Reset withdraw inputs
+    document.querySelectorAll('.withdraw-input').forEach(input => {
+        input.value = 0;
+    });
+
+    // Update history
+    updateEpochHistory();
+
+    // Recalculate
+    calculateEpochAllocations();
+}
+
+function updateEpochHistory() {
+    const historyList = document.getElementById('epochHistory');
+
+    // Keep header, add new entries
+    const newEntry = document.createElement('div');
+    newEntry.className = 'history-item';
+    const lastRecord = epochState.history[epochState.history.length - 1];
+    newEntry.innerHTML = `
+        <span>Epoch ${lastRecord.epoch}</span>
+        <span>$${Math.round(lastRecord.distributed).toLocaleString()}</span>
+        <span>$${Math.round(lastRecord.toStayers).toLocaleString()}</span>
+    `;
+    historyList.appendChild(newEntry);
+}
+
+// ==================== CHAPTER 5: YIELD SIMULATION ====================
+
+function initYieldSimulator() {
+    // Range slider display updates
+    document.getElementById('simDefaultRate').addEventListener('input', (e) => {
+        document.getElementById('defaultRateDisplay').textContent = e.target.value + '%';
+    });
+
+    document.getElementById('simRecoveryRate').addEventListener('input', (e) => {
+        document.getElementById('recoveryRateDisplay').textContent = e.target.value + '%';
+    });
+
+    // Run simulation button
+    document.getElementById('runSimBtn').addEventListener('click', runYieldSimulation);
+
+    // Run initial simulation
+    runYieldSimulation();
+}
+
+function runYieldSimulation() {
+    const deposit = parseFloat(document.getElementById('simDeposit').value) || 10000;
+    const duration = parseInt(document.getElementById('simDuration').value) || 36;
+    const defaultRate = parseFloat(document.getElementById('simDefaultRate').value) / 100;
+    const recoveryRate = parseFloat(document.getElementById('simRecoveryRate').value) / 100;
+
+    const grossApr = 0.125; // 12.5% base gross yield
+    const years = duration / 12;
+
+    // Calculate gross yield
+    const grossYield = grossApr * years;
+
+    // Calculate default losses
+    const defaultLoss = defaultRate * (1 - recoveryRate) * years;
+
+    // Net APY
+    const netApy = (grossApr - (defaultRate * (1 - recoveryRate)));
+    const totalReturn = deposit * Math.pow(1 + netApy, years);
+
+    // Comparison values
+    const bankFinal = deposit * Math.pow(1.005, years);
+    const tbillFinal = deposit * Math.pow(1.05, years);
+
+    // Update stats
+    document.getElementById('grossYield').textContent = (grossApr * 100).toFixed(1) + '%';
+    document.getElementById('defaultLosses').textContent = '-' + (defaultRate * (1 - recoveryRate) * 100).toFixed(1) + '%';
+    document.getElementById('netApy').textContent = (netApy * 100).toFixed(1) + '%';
+    document.getElementById('finalValue').textContent = '$' + Math.round(totalReturn).toLocaleString();
+
+    // Update comparison table
+    document.getElementById('compBank').textContent = '$' + Math.round(bankFinal).toLocaleString();
+    document.getElementById('compTbill').textContent = '$' + Math.round(tbillFinal).toLocaleString();
+    document.getElementById('compUsdaiApy').textContent = (netApy * 100).toFixed(1) + '%';
+    document.getElementById('compUsdai').textContent = '$' + Math.round(totalReturn).toLocaleString();
+
+    // Render chart
+    renderYieldChart(deposit, duration, netApy, defaultRate, recoveryRate);
+}
+
+function renderYieldChart(deposit, months, netApy, defaultRate, recoveryRate) {
+    const chart = document.getElementById('yieldChart');
+    chart.innerHTML = '';
+
+    const numBars = Math.min(months, 36); // Max 36 bars
+    const barWidth = 100 / numBars;
+
+    // Generate monthly values with occasional "default" events
+    const values = [];
+    let currentValue = deposit;
+
+    for (let i = 0; i < numBars; i++) {
+        const monthlyReturn = netApy / 12;
+        const isDefault = Math.random() < (defaultRate / 12);
+
+        if (isDefault) {
+            currentValue *= (1 - (1 - recoveryRate) * 0.1); // Small default impact
+            values.push({ value: currentValue, isDefault: true });
+        } else {
+            currentValue *= (1 + monthlyReturn);
+            values.push({ value: currentValue, isDefault: false });
+        }
+    }
+
+    // Normalize for display
+    const maxValue = Math.max(...values.map(v => v.value));
+    const minValue = deposit * 0.9;
+    const range = maxValue - minValue;
+
+    values.forEach((item, i) => {
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar' + (item.isDefault ? ' default' : '');
+        const height = ((item.value - minValue) / range) * 80 + 20; // Min 20% height
+        bar.style.height = height + '%';
+        chart.appendChild(bar);
+    });
 }
 
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', () => {
-    initDragDrop();
-    initQevSimulator();
+    initPoolBuilder();
+    initExitSimulator();
+    initYieldSimulator();
 });
 
 // ==================== TOUCH SUPPORT FOR MOBILE ====================
 
-// For mobile, we'll add click-to-add functionality
-document.querySelectorAll('.loan-card').forEach(card => {
-    card.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            if (!poolState.loans.find(l => l.id === card.dataset.id)) {
-                addLoanToPool(card);
-            }
-        }
+// Mobile tap support for story scenes
+document.querySelectorAll('.continue-btn').forEach(btn => {
+    btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        btn.click();
     });
 });
