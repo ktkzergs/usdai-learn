@@ -241,92 +241,150 @@
     <!-- ==================== CHAPTER 2: GPU SCALE VISUALIZATION ==================== -->
     <section class="section" id="borrower">
         <div class="scale-container">
-            <!-- Zoom Level Indicator -->
+            <!-- Zoom Level Indicator (reversed: global to micro) -->
             <div class="zoom-indicator">
-                <div class="zoom-level active" data-level="1">GPU</div>
+                <div class="zoom-level active" data-level="1">Global</div>
                 <div class="zoom-line"></div>
-                <div class="zoom-level" data-level="2">Rack</div>
+                <div class="zoom-level" data-level="2">Datacenter</div>
                 <div class="zoom-line"></div>
-                <div class="zoom-level" data-level="3">Datacenter</div>
+                <div class="zoom-level" data-level="3">Rack</div>
                 <div class="zoom-line"></div>
-                <div class="zoom-level" data-level="4">Global</div>
+                <div class="zoom-level" data-level="4">GPU</div>
             </div>
 
-            <!-- LEVEL 1: Single GPU -->
+            <!-- LEVEL 1: Global Map (START HERE) -->
             <div class="scale-level active" id="level1">
                 <div class="level-content">
-                    <h2>Step 1: Install the GPU</h2>
-                    <p>Drag the H100 into the server rack</p>
+                    <h2>$6.7 Trillion in GPU Financing Demand</h2>
+                    <p>Click any datacenter to zoom in</p>
 
-                    <div class="gpu-install-area">
-                        <!-- Draggable GPU -->
-                        <div class="drag-gpu" id="dragGpu" draggable="true">
-                            <div class="gpu-chip">
-                                <div class="gpu-die"></div>
-                                <div class="gpu-mem-modules">
-                                    <span></span><span></span><span></span><span></span>
+                    <div class="global-view">
+                        <div class="world-map" id="worldMap">
+                            <!-- North America -->
+                            <div class="dc-dot clickable" style="top: 32%; left: 12%;" data-label="Oregon" data-location="oregon"></div>
+                            <div class="dc-dot clickable" style="top: 28%; left: 18%;" data-label="Montreal" data-location="montreal"></div>
+                            <div class="dc-dot clickable pulse" style="top: 35%; left: 20%;" data-label="New York" data-location="newyork"></div>
+                            <div class="dc-dot clickable" style="top: 38%; left: 15%;" data-label="Missouri" data-location="missouri"></div>
+                            <div class="dc-dot clickable" style="top: 42%; left: 22%;" data-label="Texas" data-location="texas"></div>
+                            <div class="dc-dot clickable" style="top: 30%; left: 10%;" data-label="Washington" data-location="washington"></div>
+                            <!-- Europe -->
+                            <div class="dc-dot clickable" style="top: 25%; left: 45%;" data-label="Dublin" data-location="dublin"></div>
+                            <div class="dc-dot clickable" style="top: 28%; left: 50%;" data-label="Frankfurt" data-location="frankfurt"></div>
+                            <div class="dc-dot clickable" style="top: 30%; left: 47%;" data-label="France" data-location="france"></div>
+                            <!-- Asia -->
+                            <div class="dc-dot clickable" style="top: 32%; left: 78%;" data-label="Tokyo" data-location="tokyo"></div>
+                            <div class="dc-dot clickable" style="top: 45%; left: 75%;" data-label="Singapore" data-location="singapore"></div>
+                        </div>
+                        <div class="demand-counter">
+                            <span class="counter-label">Global AI Infrastructure Demand</span>
+                            <span class="counter-value">$6.7 TRILLION</span>
+                        </div>
+                    </div>
+
+                    <div class="level-stats global-stats">
+                        <div class="stat-box">
+                            <span class="stat-number">10M+</span>
+                            <span class="stat-label">GPUs Needed</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">1000+</span>
+                            <span class="stat-label">Datacenters</span>
+                        </div>
+                        <div class="stat-box mega-highlight">
+                            <span class="stat-number">$6.7T</span>
+                            <span class="stat-label">Total Demand</span>
+                        </div>
+                    </div>
+
+                    <div class="scale-insight">
+                        <div class="insight-icon">!</div>
+                        <p><strong>Banks can't finance this.</strong> Basel III, depreciation rules, and slow securitization lock out traditional finance. Click a datacenter to see how USD.AI solves this.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEVEL 2: Datacenter -->
+            <div class="scale-level" id="level2">
+                <div class="level-content">
+                    <h2 id="dcTitle">Inside the Datacenter</h2>
+                    <p>Click a rack to zoom in further</p>
+
+                    <div class="datacenter-view">
+                        <div class="dc-building clickable-dc" id="dcBuilding">
+                            <div class="dc-roof"></div>
+                            <div class="dc-body">
+                                <div class="rack-rows">
+                                    <div class="rack-row">
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                    </div>
+                                    <div class="rack-row">
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                    </div>
+                                    <div class="rack-row">
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                        <div class="mini-rack clickable-rack"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="gpu-info-tag">
-                                <strong>NVIDIA H100</strong>
-                                <span>$30,000</span>
                             </div>
                         </div>
-
-                        <!-- Server Rack with empty slot -->
-                        <div class="server-rack" id="serverRack">
-                            <div class="rack-frame">
-                                <div class="rack-unit filled">
-                                    <div class="server-blade"></div>
-                                </div>
-                                <div class="rack-unit filled">
-                                    <div class="server-blade"></div>
-                                </div>
-                                <div class="rack-unit drop-slot" id="gpuSlot">
-                                    <div class="slot-guide">Drop GPU Here</div>
-                                </div>
-                                <div class="rack-unit filled">
-                                    <div class="server-blade"></div>
-                                </div>
-                                <div class="rack-unit filled">
-                                    <div class="server-blade"></div>
-                                </div>
-                            </div>
-                            <div class="rack-label">Server Rack #1</div>
-                        </div>
+                        <div class="dc-label" id="dcLabel">New York Datacenter</div>
                     </div>
 
                     <div class="level-stats">
                         <div class="stat-box">
-                            <span class="stat-number">1</span>
-                            <span class="stat-label">GPU</span>
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">Racks</span>
                         </div>
                         <div class="stat-box">
-                            <span class="stat-number">$30K</span>
-                            <span class="stat-label">Cost</span>
+                            <span class="stat-number">4,000+</span>
+                            <span class="stat-label">GPUs</span>
+                        </div>
+                        <div class="stat-box highlight">
+                            <span class="stat-number">$120M+</span>
+                            <span class="stat-label">Financing Needed</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- LEVEL 2: Full Rack -->
-            <div class="scale-level" id="level2">
+            <!-- LEVEL 3: Full Rack -->
+            <div class="scale-level" id="level3">
                 <div class="level-content">
-                    <h2>Step 2: Fill the Rack</h2>
-                    <p>One rack holds 8 GPU servers</p>
+                    <h2>Server Rack</h2>
+                    <p>Click a GPU slot to zoom in</p>
 
                     <div class="rack-view">
-                        <div class="full-rack">
-                            <div class="rack-unit-mini gpu-installed"></div>
-                            <div class="rack-unit-mini gpu-installed"></div>
-                            <div class="rack-unit-mini gpu-installed"></div>
-                            <div class="rack-unit-mini gpu-installed"></div>
-                            <div class="rack-unit-mini gpu-installed"></div>
-                            <div class="rack-unit-mini gpu-installed"></div>
-                            <div class="rack-unit-mini gpu-installed"></div>
-                            <div class="rack-unit-mini gpu-installed"></div>
+                        <div class="full-rack" id="fullRack">
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
+                            <div class="rack-unit-mini gpu-installed clickable-gpu"></div>
                         </div>
-                        <div class="rack-cost-label">$240,000 per rack</div>
+                        <div class="rack-cost-label">$240,000 per rack (8 × H100)</div>
                     </div>
 
                     <div class="level-stats">
@@ -339,126 +397,87 @@
                             <span class="stat-label">Per Rack</span>
                         </div>
                     </div>
-
-                    <button class="zoom-btn" onclick="zoomToLevel(3)">Zoom Out to Datacenter</button>
                 </div>
             </div>
 
-            <!-- LEVEL 3: Datacenter -->
-            <div class="scale-level" id="level3">
+            <!-- LEVEL 4: Single GPU -->
+            <div class="scale-level" id="level4">
                 <div class="level-content">
-                    <h2>Step 3: The Datacenter</h2>
-                    <p>A single datacenter needs hundreds of racks</p>
+                    <h2>The GPU</h2>
+                    <p>This is what gets financed through USD.AI</p>
 
-                    <div class="datacenter-view">
-                        <div class="dc-building">
-                            <div class="dc-roof"></div>
-                            <div class="dc-body">
-                                <div class="rack-rows">
-                                    <div class="rack-row">
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                    </div>
-                                    <div class="rack-row">
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                    </div>
-                                    <div class="rack-row">
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                        <div class="mini-rack"></div>
-                                    </div>
+                    <div class="gpu-detail-area">
+                        <div class="gpu-large">
+                            <div class="gpu-chip-large">
+                                <div class="gpu-die-large"></div>
+                                <div class="gpu-mem-large">
+                                    <span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
+                            </div>
+                            <div class="gpu-specs">
+                                <div class="spec-row">
+                                    <span class="spec-label">Model</span>
+                                    <span class="spec-value">NVIDIA H100 SXM</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Memory</span>
+                                    <span class="spec-value">80GB HBM3</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Cost</span>
+                                    <span class="spec-value highlight">$30,000+</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-label">Collateral</span>
+                                    <span class="spec-value">ERC-721 NFT</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="dc-label">CoreWeave Datacenter</div>
+                    </div>
+
+                    <div class="financing-flow">
+                        <h3>How USD.AI Finances This</h3>
+                        <div class="flow-steps">
+                            <div class="flow-step">
+                                <div class="fs-num">1</div>
+                                <div class="fs-text">GPU tokenized via CALIBER</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="fs-num">2</div>
+                                <div class="fs-text">Loan issued at 15% APR</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="fs-num">3</div>
+                                <div class="fs-text">sUSDai holders earn ~13%</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="level-stats">
                         <div class="stat-box">
-                            <span class="stat-number">500+</span>
-                            <span class="stat-label">Racks</span>
+                            <span class="stat-number">$30K</span>
+                            <span class="stat-label">GPU Cost</span>
                         </div>
                         <div class="stat-box">
-                            <span class="stat-number">4,000</span>
-                            <span class="stat-label">GPUs</span>
+                            <span class="stat-number">15%</span>
+                            <span class="stat-label">Borrower APR</span>
                         </div>
                         <div class="stat-box highlight">
-                            <span class="stat-number">$120M</span>
-                            <span class="stat-label">Financing Needed</span>
+                            <span class="stat-number">~13%</span>
+                            <span class="stat-label">sUSDai Yield</span>
                         </div>
                     </div>
 
-                    <button class="zoom-btn" onclick="zoomToLevel(4)">Zoom Out to Global Scale</button>
+                    <button class="zoom-btn primary" onclick="goToSection('pool')">See How Pools Work</button>
                 </div>
             </div>
 
-            <!-- LEVEL 4: Global Scale -->
-            <div class="scale-level" id="level4">
-                <div class="level-content">
-                    <h2>The Global AI Infrastructure</h2>
-                    <p>This is why USD.AI exists</p>
-
-                    <div class="global-view">
-                        <div class="world-map">
-                            <div class="dc-dot" style="top: 30%; left: 20%;" data-label="Virginia"></div>
-                            <div class="dc-dot" style="top: 25%; left: 15%;" data-label="Oregon"></div>
-                            <div class="dc-dot" style="top: 35%; left: 25%;" data-label="Texas"></div>
-                            <div class="dc-dot" style="top: 20%; left: 45%;" data-label="Dublin"></div>
-                            <div class="dc-dot" style="top: 25%; left: 48%;" data-label="Frankfurt"></div>
-                            <div class="dc-dot" style="top: 30%; left: 75%;" data-label="Tokyo"></div>
-                            <div class="dc-dot" style="top: 35%; left: 70%;" data-label="Singapore"></div>
-                            <div class="dc-dot pulse" style="top: 28%; left: 18%;" data-label="New DC"></div>
-                        </div>
-                        <div class="demand-counter">
-                            <span class="counter-label">Global GPU Financing Demand</span>
-                            <span class="counter-value" id="globalDemand">$200,000,000,000+</span>
-                        </div>
-                    </div>
-
-                    <div class="level-stats global-stats">
-                        <div class="stat-box">
-                            <span class="stat-number">1M+</span>
-                            <span class="stat-label">GPUs Needed</span>
-                        </div>
-                        <div class="stat-box">
-                            <span class="stat-number">100+</span>
-                            <span class="stat-label">Datacenters</span>
-                        </div>
-                        <div class="stat-box mega-highlight">
-                            <span class="stat-number">$200B+</span>
-                            <span class="stat-label">Total Demand</span>
-                        </div>
-                    </div>
-
-                    <div class="scale-insight">
-                        <div class="insight-icon">!</div>
-                        <p><strong>Banks can't touch this.</strong> Basel III rules, depreciation, and slow securitization make traditional financing impossible. That's where USD.AI comes in.</p>
-                    </div>
-
-                    <button class="zoom-btn primary" onclick="goToSection('pool')">See How USD.AI Finances This</button>
-                </div>
-            </div>
-
-            <!-- Reset button -->
-            <button class="reset-zoom-btn" id="resetZoom" onclick="zoomToLevel(1)">Reset</button>
+            <!-- Back/Reset buttons -->
+            <button class="back-zoom-btn" id="backZoom" onclick="zoomBack()">← Back</button>
+            <button class="reset-zoom-btn" id="resetZoom" onclick="zoomToLevel(1)">Reset to Globe</button>
         </div>
     </section>
 

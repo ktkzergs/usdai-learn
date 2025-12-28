@@ -9,7 +9,7 @@ const state = {
 
     // GPU Scale Visualization
     currentZoomLevel: 1,
-    gpuInstalled: false,
+    selectedLocation: 'New York',
 
     // Pool Builder
     poolSize: 10000000, // $10M base pool
@@ -86,42 +86,38 @@ function nextScene(n) {
 // ==================== CHAPTER 2: GPU SCALE VISUALIZATION ====================
 
 function initGpuDragDrop() {
-    const gpu = document.getElementById('dragGpu');
-    const slot = document.getElementById('gpuSlot');
+    // Datacenter dots - click to zoom to datacenter
+    document.querySelectorAll('.dc-dot.clickable').forEach(dot => {
+        dot.addEventListener('click', () => {
+            const location = dot.dataset.location;
+            const label = dot.dataset.label;
+            state.selectedLocation = label;
 
-    if (!gpu || !slot) return;
+            // Update datacenter title
+            const dcTitle = document.getElementById('dcTitle');
+            const dcLabel = document.getElementById('dcLabel');
+            if (dcTitle) dcTitle.textContent = `Inside ${label} Datacenter`;
+            if (dcLabel) dcLabel.textContent = `${label} Datacenter`;
 
-    // Drag events
-    gpu.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', 'gpu');
-        gpu.classList.add('dragging');
+            zoomToLevel(2);
+        });
     });
 
-    gpu.addEventListener('dragend', () => {
-        gpu.classList.remove('dragging');
+    // Racks - click to zoom to rack view
+    document.querySelectorAll('.mini-rack.clickable-rack').forEach(rack => {
+        rack.addEventListener('click', () => {
+            zoomToLevel(3);
+        });
     });
 
-    // Drop zone events
-    slot.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        slot.classList.add('drag-over');
+    // GPU slots - click to zoom to GPU detail
+    document.querySelectorAll('.rack-unit-mini.clickable-gpu').forEach(gpu => {
+        gpu.addEventListener('click', () => {
+            zoomToLevel(4);
+        });
     });
 
-    slot.addEventListener('dragleave', () => {
-        slot.classList.remove('drag-over');
-    });
-
-    slot.addEventListener('drop', (e) => {
-        e.preventDefault();
-        slot.classList.remove('drag-over');
-        installGpu();
-    });
-
-    // Click also works
-    slot.addEventListener('click', installGpu);
-    gpu.addEventListener('click', installGpu);
-
-    // Zoom level clicks
+    // Zoom level indicator clicks
     document.querySelectorAll('.zoom-level').forEach(level => {
         level.addEventListener('click', () => {
             const levelNum = parseInt(level.dataset.level);
@@ -130,28 +126,6 @@ function initGpuDragDrop() {
             }
         });
     });
-}
-
-function installGpu() {
-    const gpu = document.getElementById('dragGpu');
-    const slot = document.getElementById('gpuSlot');
-
-    if (!gpu || !slot || state.gpuInstalled) return;
-
-    state.gpuInstalled = true;
-
-    // Hide the draggable GPU
-    gpu.style.display = 'none';
-
-    // Fill the slot
-    slot.classList.remove('drop-slot');
-    slot.classList.add('gpu-filled');
-    slot.innerHTML = '<div class="server-blade gpu-blade"></div>';
-
-    // After a moment, zoom to level 2
-    setTimeout(() => {
-        zoomToLevel(2);
-    }, 800);
 }
 
 function zoomToLevel(level) {
@@ -177,29 +151,16 @@ function zoomToLevel(level) {
         line.classList.toggle('completed', i + 1 < level);
     });
 
-    // Show/hide reset button
+    // Show/hide navigation buttons
+    const backBtn = document.getElementById('backZoom');
     const resetBtn = document.getElementById('resetZoom');
-    if (resetBtn) {
-        resetBtn.classList.toggle('visible', level > 1);
-    }
-
-    // Reset GPU if going back to level 1
-    if (level === 1) {
-        resetGpuInstall();
-    }
+    if (backBtn) backBtn.classList.toggle('visible', level > 1);
+    if (resetBtn) resetBtn.classList.toggle('visible', level > 1);
 }
 
-function resetGpuInstall() {
-    state.gpuInstalled = false;
-
-    const gpu = document.getElementById('dragGpu');
-    const slot = document.getElementById('gpuSlot');
-
-    if (gpu) gpu.style.display = '';
-    if (slot) {
-        slot.classList.add('drop-slot');
-        slot.classList.remove('gpu-filled');
-        slot.innerHTML = '<div class="slot-guide">Drop GPU Here</div>';
+function zoomBack() {
+    if (state.currentZoomLevel > 1) {
+        zoomToLevel(state.currentZoomLevel - 1);
     }
 }
 
@@ -338,7 +299,8 @@ function updateQueueDisplay() {
     if (aliceStatusEl) aliceStatusEl.textContent = alice.withdraw > 0 ? 'Requesting' : 'Holding';
     if (bobStatusEl) bobStatusEl.textContent = bob.withdraw > 0 ? 'Requesting' : 'Holding';
 
-    // Calculate distribution based on bids (higher bid = higher priority)
+    // SMOOTHENED QEV: Pro-rata distribution - everyone gets proportional share
+    // Bids act as exit fees paid to stayers, NOT priority
     const totalRequested = alice.withdraw + bob.withdraw;
 
     let aliceGets = 0;
@@ -346,24 +308,14 @@ function updateQueueDisplay() {
 
     if (totalRequested > 0) {
         if (totalRequested <= liquidity) {
-            // Everyone gets what they want
+            // Full liquidity available - everyone gets what they want
             aliceGets = alice.withdraw;
             bobGets = bob.withdraw;
         } else {
-            // Distribute by bid priority
-            // Higher bid gets filled first
-            if (alice.bid > bob.bid) {
-                aliceGets = Math.min(alice.withdraw, liquidity);
-                bobGets = Math.min(bob.withdraw, liquidity - aliceGets);
-            } else if (bob.bid > alice.bid) {
-                bobGets = Math.min(bob.withdraw, liquidity);
-                aliceGets = Math.min(alice.withdraw, liquidity - bobGets);
-            } else {
-                // Equal bids - pro-rata
-                const ratio = liquidity / totalRequested;
-                aliceGets = Math.floor(alice.withdraw * ratio);
-                bobGets = Math.floor(bob.withdraw * ratio);
-            }
+            // Pro-rata distribution: everyone gets same % of their request
+            const fillRatio = liquidity / totalRequested;
+            aliceGets = Math.floor(alice.withdraw * fillRatio);
+            bobGets = Math.floor(bob.withdraw * fillRatio);
         }
     }
 
@@ -410,26 +362,20 @@ function advanceEpoch() {
     let distributed = Math.min(totalRequested, liquidity);
     let toStayers = liquidity - distributed;
 
-    // Process withdrawals - update balances
+    // Process withdrawals - pro-rata distribution
     if (totalRequested > 0) {
         let aliceGets = 0;
         let bobGets = 0;
 
         if (totalRequested <= liquidity) {
+            // Everyone gets what they want
             aliceGets = alice.withdraw;
             bobGets = bob.withdraw;
         } else {
-            if (alice.bid > bob.bid) {
-                aliceGets = Math.min(alice.withdraw, liquidity);
-                bobGets = Math.min(bob.withdraw, liquidity - aliceGets);
-            } else if (bob.bid > alice.bid) {
-                bobGets = Math.min(bob.withdraw, liquidity);
-                aliceGets = Math.min(alice.withdraw, liquidity - bobGets);
-            } else {
-                const ratio = liquidity / totalRequested;
-                aliceGets = Math.floor(alice.withdraw * ratio);
-                bobGets = Math.floor(bob.withdraw * ratio);
-            }
+            // Pro-rata: everyone gets same % of their request
+            const fillRatio = liquidity / totalRequested;
+            aliceGets = Math.floor(alice.withdraw * fillRatio);
+            bobGets = Math.floor(bob.withdraw * fillRatio);
         }
 
         alice.balance -= aliceGets;
