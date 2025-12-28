@@ -66,10 +66,18 @@ body {
 .nav-logo {
     font-weight: 700;
     font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    white-space: nowrap;
+}
+
+.logo-usd, .logo-dot, .logo-ai {
+    display: inline;
 }
 
 .logo-usd { color: white; }
-.logo-dot { color: var(--accent-green); }
+.logo-dot { color: var(--accent-green); font-weight: 700; }
 .logo-ai { color: white; }
 
 .nav-tabs {
@@ -741,8 +749,12 @@ body {
     box-shadow: 0 8px 25px rgba(0, 201, 80, 0.3);
 }
 
-.gpu-draggable:active {
+.gpu-draggable:active,
+.gpu-draggable.dragging {
     cursor: grabbing;
+    transform: scale(1.1);
+    box-shadow: 0 12px 35px rgba(0, 201, 80, 0.4);
+    opacity: 0.9;
 }
 
 .gpu-visual {
@@ -821,6 +833,21 @@ body {
     border-style: solid;
     border-color: var(--accent-green);
     background: rgba(0, 201, 80, 0.05);
+}
+
+.drop-zone.drag-over {
+    border-color: var(--accent-green);
+    background: rgba(0, 201, 80, 0.15);
+    transform: scale(1.02);
+}
+
+.drop-zone.active {
+    cursor: pointer;
+}
+
+.drop-zone.active:hover {
+    border-color: var(--accent-green);
+    background: rgba(0, 201, 80, 0.1);
 }
 
 .zone-icon {

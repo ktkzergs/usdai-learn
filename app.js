@@ -51,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
         advBtn.addEventListener('click', advanceCaliberStage);
     }
 
+    // Initialize drag-and-drop for GPU
+    initGpuDragDrop();
+
     // Initialize simulation
     updateSimulation();
 
@@ -86,6 +89,71 @@ function nextScene(n) {
 }
 
 // ==================== CHAPTER 2: CALIBER BORROWER FLOW ====================
+
+function initGpuDragDrop() {
+    const gpu = document.getElementById('draggableGpu');
+    if (!gpu) return;
+
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+
+    // Make GPU draggable
+    gpu.setAttribute('draggable', 'true');
+
+    // Mouse/touch start
+    gpu.addEventListener('mousedown', startDrag);
+    gpu.addEventListener('touchstart', startDrag, { passive: false });
+
+    // Drag events for HTML5 drag-and-drop
+    gpu.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', 'gpu');
+        gpu.classList.add('dragging');
+    });
+
+    gpu.addEventListener('dragend', () => {
+        gpu.classList.remove('dragging');
+    });
+
+    // Set up drop zones
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const zoneStage = parseInt(zone.dataset.stage);
+            if (zoneStage === state.caliberStage) {
+                zone.classList.add('drag-over');
+            }
+        });
+
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('drag-over');
+        });
+
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const zoneStage = parseInt(zone.dataset.stage);
+
+            // Only allow drop on current active stage
+            if (zoneStage === state.caliberStage && state.caliberStage < 5) {
+                advanceCaliberStage();
+            }
+        });
+
+        // Click on zone also advances
+        zone.addEventListener('click', () => {
+            const zoneStage = parseInt(zone.dataset.stage);
+            if (zoneStage === state.caliberStage && state.caliberStage < 5) {
+                advanceCaliberStage();
+            }
+        });
+    });
+
+    function startDrag(e) {
+        if (e.type === 'touchstart') {
+            e.preventDefault();
+        }
+    }
+}
 
 const caliberInfo = {
     1: {
