@@ -7,8 +7,9 @@ const state = {
     // Story
     currentScene: 1,
 
-    // CALIBER stages
-    caliberStage: 1,
+    // GPU Scale Visualization
+    currentZoomLevel: 1,
+    gpuInstalled: false,
 
     // Pool Builder
     poolSize: 10000000, // $10M base pool
@@ -45,13 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize pool builder
     initPoolBuilder();
 
-    // Initialize CALIBER stage button
-    const advBtn = document.getElementById('advanceStage');
-    if (advBtn) {
-        advBtn.addEventListener('click', advanceCaliberStage);
-    }
-
-    // Initialize drag-and-drop for GPU
+    // Initialize GPU scale visualization
     initGpuDragDrop();
 
     // Initialize simulation
@@ -88,23 +83,15 @@ function nextScene(n) {
     if (newEl) newEl.classList.remove('hidden');
 }
 
-// ==================== CHAPTER 2: CALIBER BORROWER FLOW ====================
+// ==================== CHAPTER 2: GPU SCALE VISUALIZATION ====================
 
 function initGpuDragDrop() {
-    const gpu = document.getElementById('draggableGpu');
-    if (!gpu) return;
+    const gpu = document.getElementById('dragGpu');
+    const slot = document.getElementById('gpuSlot');
 
-    let isDragging = false;
-    let startX, startY, initialX, initialY;
+    if (!gpu || !slot) return;
 
-    // Make GPU draggable
-    gpu.setAttribute('draggable', 'true');
-
-    // Mouse/touch start
-    gpu.addEventListener('mousedown', startDrag);
-    gpu.addEventListener('touchstart', startDrag, { passive: false });
-
-    // Drag events for HTML5 drag-and-drop
+    // Drag events
     gpu.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', 'gpu');
         gpu.classList.add('dragging');
@@ -114,171 +101,105 @@ function initGpuDragDrop() {
         gpu.classList.remove('dragging');
     });
 
-    // Set up drop zones
-    document.querySelectorAll('.drop-zone').forEach(zone => {
-        zone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            const zoneStage = parseInt(zone.dataset.stage);
-            if (zoneStage === state.caliberStage) {
-                zone.classList.add('drag-over');
-            }
-        });
+    // Drop zone events
+    slot.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        slot.classList.add('drag-over');
+    });
 
-        zone.addEventListener('dragleave', () => {
-            zone.classList.remove('drag-over');
-        });
+    slot.addEventListener('dragleave', () => {
+        slot.classList.remove('drag-over');
+    });
 
-        zone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            zone.classList.remove('drag-over');
-            const zoneStage = parseInt(zone.dataset.stage);
+    slot.addEventListener('drop', (e) => {
+        e.preventDefault();
+        slot.classList.remove('drag-over');
+        installGpu();
+    });
 
-            // Only allow drop on current active stage
-            if (zoneStage === state.caliberStage && state.caliberStage < 5) {
-                advanceCaliberStage();
-            }
-        });
+    // Click also works
+    slot.addEventListener('click', installGpu);
+    gpu.addEventListener('click', installGpu);
 
-        // Click on zone also advances
-        zone.addEventListener('click', () => {
-            const zoneStage = parseInt(zone.dataset.stage);
-            if (zoneStage === state.caliberStage && state.caliberStage < 5) {
-                advanceCaliberStage();
+    // Zoom level clicks
+    document.querySelectorAll('.zoom-level').forEach(level => {
+        level.addEventListener('click', () => {
+            const levelNum = parseInt(level.dataset.level);
+            if (levelNum <= state.currentZoomLevel) {
+                zoomToLevel(levelNum);
             }
         });
     });
+}
 
-    function startDrag(e) {
-        if (e.type === 'touchstart') {
-            e.preventDefault();
+function installGpu() {
+    const gpu = document.getElementById('dragGpu');
+    const slot = document.getElementById('gpuSlot');
+
+    if (!gpu || !slot || state.gpuInstalled) return;
+
+    state.gpuInstalled = true;
+
+    // Hide the draggable GPU
+    gpu.style.display = 'none';
+
+    // Fill the slot
+    slot.classList.remove('drop-slot');
+    slot.classList.add('gpu-filled');
+    slot.innerHTML = '<div class="server-blade gpu-blade"></div>';
+
+    // After a moment, zoom to level 2
+    setTimeout(() => {
+        zoomToLevel(2);
+    }, 800);
+}
+
+function zoomToLevel(level) {
+    state.currentZoomLevel = level;
+
+    // Update scale levels
+    document.querySelectorAll('.scale-level').forEach(l => l.classList.remove('active'));
+    const targetLevel = document.getElementById(`level${level}`);
+    if (targetLevel) targetLevel.classList.add('active');
+
+    // Update zoom indicator
+    document.querySelectorAll('.zoom-level').forEach((z, i) => {
+        const zLevel = i + 1;
+        z.classList.remove('active', 'completed');
+        if (zLevel < level) {
+            z.classList.add('completed');
+        } else if (zLevel === level) {
+            z.classList.add('active');
         }
+    });
+
+    document.querySelectorAll('.zoom-line').forEach((line, i) => {
+        line.classList.toggle('completed', i + 1 < level);
+    });
+
+    // Show/hide reset button
+    const resetBtn = document.getElementById('resetZoom');
+    if (resetBtn) {
+        resetBtn.classList.toggle('visible', level > 1);
+    }
+
+    // Reset GPU if going back to level 1
+    if (level === 1) {
+        resetGpuInstall();
     }
 }
 
-const caliberInfo = {
-    1: {
-        title: "Stage 1: Purchase from OEM",
-        text: "The journey begins when a datacenter needs to acquire GPUs. They purchase from NVIDIA or authorized resellers.",
-        stats: [
-            { label: "GPU Cost", value: "$30,000" },
-            { label: "Financing Need", value: "$30,000" }
-        ]
-    },
-    2: {
-        title: "Stage 2: Datacenter Receipt",
-        text: "The GPU is delivered to a verified datacenter. A warehouse receipt is issued confirming physical custody of the asset.",
-        stats: [
-            { label: "Asset Status", value: "Verified" },
-            { label: "Custody", value: "Datacenter" }
-        ]
-    },
-    3: {
-        title: "Stage 3: SPV Tokenization",
-        text: "CALIBER creates a bankruptcy-remote SPV. The warehouse receipt is tokenized as an ERC-721 NFT, creating on-chain collateral.",
-        stats: [
-            { label: "Token Type", value: "ERC-721" },
-            { label: "Legal Status", value: "Bankruptcy Remote" }
-        ]
-    },
-    4: {
-        title: "Stage 4: Protocol Loan",
-        text: "The protocol issues a loan against the GPU collateral. Borrower receives $97 after 3% origination fee. Pool splits: $7 FiLo + $93 sUSDai.",
-        stats: [
-            { label: "Loan Amount", value: "$97" },
-            { label: "Origination Fee", value: "3% ($3)" }
-        ]
-    },
-    5: {
-        title: "Stage 5: Active Loan",
-        text: "Borrower pays 15% APR interest. After protocol's 10% NIM, ~13% flows to sUSDai holders. FiLo gets 25% APR on their 7% slice.",
-        stats: [
-            { label: "Borrower Rate", value: "15% APR" },
-            { label: "sUSDai Yield", value: "~13% APR" }
-        ]
-    }
-};
+function resetGpuInstall() {
+    state.gpuInstalled = false;
 
-function advanceCaliberStage() {
-    if (state.caliberStage >= 5) {
-        // Reset to stage 1
-        state.caliberStage = 0;
-        resetCaliberUI();
-    }
+    const gpu = document.getElementById('dragGpu');
+    const slot = document.getElementById('gpuSlot');
 
-    state.caliberStage++;
-    updateCaliberUI();
-}
-
-function resetCaliberUI() {
-    // Reset all dots and lines
-    document.querySelectorAll('.stage-dot').forEach(dot => {
-        dot.classList.remove('active', 'completed');
-    });
-    document.querySelectorAll('.stage-line').forEach(line => {
-        line.classList.remove('completed');
-    });
-    document.querySelectorAll('.drop-zone').forEach(zone => {
-        zone.classList.remove('active', 'completed');
-    });
-}
-
-function updateCaliberUI() {
-    const stage = state.caliberStage;
-
-    // Update dots
-    document.querySelectorAll('.stage-dot').forEach((dot, i) => {
-        const dotStage = i + 1;
-        dot.classList.remove('active', 'completed');
-        if (dotStage < stage) {
-            dot.classList.add('completed');
-        } else if (dotStage === stage) {
-            dot.classList.add('active');
-        }
-    });
-
-    // Update lines
-    document.querySelectorAll('.stage-line').forEach((line, i) => {
-        const lineStage = i + 1;
-        line.classList.toggle('completed', lineStage < stage);
-    });
-
-    // Update drop zones
-    document.querySelectorAll('.drop-zone').forEach((zone, i) => {
-        const zoneStage = i + 1;
-        zone.classList.remove('active', 'completed');
-        if (zoneStage < stage) {
-            zone.classList.add('completed');
-        } else if (zoneStage === stage) {
-            zone.classList.add('active');
-        }
-    });
-
-    // Update info panel
-    const info = caliberInfo[stage];
-    const panel = document.getElementById('caliberInfo');
-
-    if (panel && info) {
-        const titleEl = panel.querySelector('h3');
-        const textEl = panel.querySelector('.info-content p');
-        const statsEl = panel.querySelector('.info-stats');
-
-        if (titleEl) titleEl.textContent = info.title;
-        if (textEl) textEl.textContent = info.text;
-
-        if (statsEl) {
-            statsEl.innerHTML = info.stats.map(s => `
-                <div class="info-stat">
-                    <span class="stat-label">${s.label}</span>
-                    <span class="stat-value">${s.value}</span>
-                </div>
-            `).join('');
-        }
-    }
-
-    // Update button text
-    const btn = document.getElementById('advanceStage');
-    if (btn) {
-        btn.textContent = stage >= 5 ? 'Reset & Start Over' : 'Advance to Next Stage';
+    if (gpu) gpu.style.display = '';
+    if (slot) {
+        slot.classList.add('drop-slot');
+        slot.classList.remove('gpu-filled');
+        slot.innerHTML = '<div class="slot-guide">Drop GPU Here</div>';
     }
 }
 

@@ -238,129 +238,227 @@
         </div>
     </section>
 
-    <!-- ==================== CHAPTER 2: BORROWER FLOW (CALIBER) ==================== -->
+    <!-- ==================== CHAPTER 2: GPU SCALE VISUALIZATION ==================== -->
     <section class="section" id="borrower">
-        <div class="borrower-container">
-            <div class="section-header">
-                <h1>The Borrower Journey</h1>
-                <p>Drag the GPU through each stage to see how CALIBER works</p>
+        <div class="scale-container">
+            <!-- Zoom Level Indicator -->
+            <div class="zoom-indicator">
+                <div class="zoom-level active" data-level="1">GPU</div>
+                <div class="zoom-line"></div>
+                <div class="zoom-level" data-level="2">Rack</div>
+                <div class="zoom-line"></div>
+                <div class="zoom-level" data-level="3">Datacenter</div>
+                <div class="zoom-line"></div>
+                <div class="zoom-level" data-level="4">Global</div>
             </div>
 
-            <div class="caliber-simulator">
-                <!-- Stage indicators -->
-                <div class="stage-progress">
-                    <div class="stage-dot active" data-stage="1">1</div>
-                    <div class="stage-line"></div>
-                    <div class="stage-dot" data-stage="2">2</div>
-                    <div class="stage-line"></div>
-                    <div class="stage-dot" data-stage="3">3</div>
-                    <div class="stage-line"></div>
-                    <div class="stage-dot" data-stage="4">4</div>
-                    <div class="stage-line"></div>
-                    <div class="stage-dot" data-stage="5">5</div>
-                </div>
+            <!-- LEVEL 1: Single GPU -->
+            <div class="scale-level active" id="level1">
+                <div class="level-content">
+                    <h2>Step 1: Install the GPU</h2>
+                    <p>Drag the H100 into the server rack</p>
 
-                <!-- The draggable GPU -->
-                <div class="gpu-draggable" id="draggableGpu">
-                    <div class="gpu-visual">
-                        <div class="gpu-body"></div>
-                        <div class="gpu-cores"></div>
-                        <div class="gpu-mem"></div>
-                    </div>
-                    <span class="gpu-label">H100 GPU</span>
-                    <span class="gpu-value">$30,000</span>
-                </div>
-
-                <!-- Drop zones -->
-                <div class="drop-zones">
-                    <!-- Stage 1: OEM -->
-                    <div class="drop-zone active" id="zone1" data-stage="1">
-                        <div class="zone-icon oem"></div>
-                        <div class="zone-label">OEM (NVIDIA)</div>
-                        <div class="zone-description">GPU manufactured and ready for sale</div>
-                        <div class="zone-action">Drag GPU here to purchase</div>
-                    </div>
-
-                    <!-- Stage 2: Datacenter -->
-                    <div class="drop-zone" id="zone2" data-stage="2">
-                        <div class="zone-icon datacenter"></div>
-                        <div class="zone-label">Datacenter</div>
-                        <div class="zone-description">Receives and installs GPUs</div>
-                        <div class="zone-action">GPU delivered with warehouse receipt</div>
-                    </div>
-
-                    <!-- Stage 3: SPV Tokenization -->
-                    <div class="drop-zone" id="zone3" data-stage="3">
-                        <div class="zone-icon spv"></div>
-                        <div class="zone-label">Borrower SPV</div>
-                        <div class="zone-description">Warehouse receipt tokenized as NFT</div>
-                        <div class="zone-action">CALIBER creates ERC-721 collateral</div>
-                    </div>
-
-                    <!-- Stage 4: Protocol Loan -->
-                    <div class="drop-zone" id="zone4" data-stage="4">
-                        <div class="zone-icon protocol"></div>
-                        <div class="zone-label">Protocol</div>
-                        <div class="zone-description">Issues loan against GPU collateral</div>
-                        <div class="zone-action">$97 loan (after 3% origination fee)</div>
-                    </div>
-
-                    <!-- Stage 5: Active Loan -->
-                    <div class="drop-zone" id="zone5" data-stage="5">
-                        <div class="zone-icon active-loan"></div>
-                        <div class="zone-label">Active Loan</div>
-                        <div class="zone-description">Borrower pays 15% APR interest</div>
-                        <div class="zone-action">Interest flows to sUSDai holders</div>
-                    </div>
-                </div>
-
-                <!-- Info panel that updates -->
-                <div class="caliber-info-panel" id="caliberInfo">
-                    <h3>Stage 1: Purchase from OEM</h3>
-                    <div class="info-content">
-                        <p>The journey begins when a datacenter needs to acquire GPUs. They purchase from NVIDIA or authorized resellers.</p>
-                        <div class="info-stats">
-                            <div class="info-stat">
-                                <span class="stat-label">GPU Cost</span>
-                                <span class="stat-value">$30,000</span>
+                    <div class="gpu-install-area">
+                        <!-- Draggable GPU -->
+                        <div class="drag-gpu" id="dragGpu" draggable="true">
+                            <div class="gpu-chip">
+                                <div class="gpu-die"></div>
+                                <div class="gpu-mem-modules">
+                                    <span></span><span></span><span></span><span></span>
+                                </div>
                             </div>
-                            <div class="info-stat">
-                                <span class="stat-label">Financing Need</span>
-                                <span class="stat-value">$30,000</span>
+                            <div class="gpu-info-tag">
+                                <strong>NVIDIA H100</strong>
+                                <span>$30,000</span>
                             </div>
                         </div>
+
+                        <!-- Server Rack with empty slot -->
+                        <div class="server-rack" id="serverRack">
+                            <div class="rack-frame">
+                                <div class="rack-unit filled">
+                                    <div class="server-blade"></div>
+                                </div>
+                                <div class="rack-unit filled">
+                                    <div class="server-blade"></div>
+                                </div>
+                                <div class="rack-unit drop-slot" id="gpuSlot">
+                                    <div class="slot-guide">Drop GPU Here</div>
+                                </div>
+                                <div class="rack-unit filled">
+                                    <div class="server-blade"></div>
+                                </div>
+                                <div class="rack-unit filled">
+                                    <div class="server-blade"></div>
+                                </div>
+                            </div>
+                            <div class="rack-label">Server Rack #1</div>
+                        </div>
                     </div>
-                    <button class="advance-stage-btn" id="advanceStage">Advance to Next Stage</button>
+
+                    <div class="level-stats">
+                        <div class="stat-box">
+                            <span class="stat-number">1</span>
+                            <span class="stat-label">GPU</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">$30K</span>
+                            <span class="stat-label">Cost</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Default scenario -->
-            <div class="default-explainer">
-                <h3>What if the borrower defaults?</h3>
-                <div class="default-flow">
-                    <div class="default-step">
-                        <div class="ds-icon warning">!</div>
-                        <span>Missed Payments</span>
+            <!-- LEVEL 2: Full Rack -->
+            <div class="scale-level" id="level2">
+                <div class="level-content">
+                    <h2>Step 2: Fill the Rack</h2>
+                    <p>One rack holds 8 GPU servers</p>
+
+                    <div class="rack-view">
+                        <div class="full-rack">
+                            <div class="rack-unit-mini gpu-installed"></div>
+                            <div class="rack-unit-mini gpu-installed"></div>
+                            <div class="rack-unit-mini gpu-installed"></div>
+                            <div class="rack-unit-mini gpu-installed"></div>
+                            <div class="rack-unit-mini gpu-installed"></div>
+                            <div class="rack-unit-mini gpu-installed"></div>
+                            <div class="rack-unit-mini gpu-installed"></div>
+                            <div class="rack-unit-mini gpu-installed"></div>
+                        </div>
+                        <div class="rack-cost-label">$240,000 per rack</div>
                     </div>
-                    <div class="default-arrow"></div>
-                    <div class="default-step">
-                        <div class="ds-icon filo">F</div>
-                        <span>FiLo absorbs first 7%</span>
+
+                    <div class="level-stats">
+                        <div class="stat-box">
+                            <span class="stat-number">8</span>
+                            <span class="stat-label">GPUs per Rack</span>
+                        </div>
+                        <div class="stat-box highlight">
+                            <span class="stat-number">$240K</span>
+                            <span class="stat-label">Per Rack</span>
+                        </div>
                     </div>
-                    <div class="default-arrow"></div>
-                    <div class="default-step">
-                        <div class="ds-icon auction">A</div>
-                        <span>GPU auctioned</span>
-                    </div>
-                    <div class="default-arrow"></div>
-                    <div class="default-step">
-                        <div class="ds-icon return">$</div>
-                        <span>sUSDai: no loss</span>
-                    </div>
+
+                    <button class="zoom-btn" onclick="zoomToLevel(3)">Zoom Out to Datacenter</button>
                 </div>
             </div>
 
-            <button class="continue-btn" onclick="goToSection('pool')">See How Pools Work</button>
+            <!-- LEVEL 3: Datacenter -->
+            <div class="scale-level" id="level3">
+                <div class="level-content">
+                    <h2>Step 3: The Datacenter</h2>
+                    <p>A single datacenter needs hundreds of racks</p>
+
+                    <div class="datacenter-view">
+                        <div class="dc-building">
+                            <div class="dc-roof"></div>
+                            <div class="dc-body">
+                                <div class="rack-rows">
+                                    <div class="rack-row">
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                    </div>
+                                    <div class="rack-row">
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                    </div>
+                                    <div class="rack-row">
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                        <div class="mini-rack"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dc-label">CoreWeave Datacenter</div>
+                    </div>
+
+                    <div class="level-stats">
+                        <div class="stat-box">
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">Racks</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">4,000</span>
+                            <span class="stat-label">GPUs</span>
+                        </div>
+                        <div class="stat-box highlight">
+                            <span class="stat-number">$120M</span>
+                            <span class="stat-label">Financing Needed</span>
+                        </div>
+                    </div>
+
+                    <button class="zoom-btn" onclick="zoomToLevel(4)">Zoom Out to Global Scale</button>
+                </div>
+            </div>
+
+            <!-- LEVEL 4: Global Scale -->
+            <div class="scale-level" id="level4">
+                <div class="level-content">
+                    <h2>The Global AI Infrastructure</h2>
+                    <p>This is why USD.AI exists</p>
+
+                    <div class="global-view">
+                        <div class="world-map">
+                            <div class="dc-dot" style="top: 30%; left: 20%;" data-label="Virginia"></div>
+                            <div class="dc-dot" style="top: 25%; left: 15%;" data-label="Oregon"></div>
+                            <div class="dc-dot" style="top: 35%; left: 25%;" data-label="Texas"></div>
+                            <div class="dc-dot" style="top: 20%; left: 45%;" data-label="Dublin"></div>
+                            <div class="dc-dot" style="top: 25%; left: 48%;" data-label="Frankfurt"></div>
+                            <div class="dc-dot" style="top: 30%; left: 75%;" data-label="Tokyo"></div>
+                            <div class="dc-dot" style="top: 35%; left: 70%;" data-label="Singapore"></div>
+                            <div class="dc-dot pulse" style="top: 28%; left: 18%;" data-label="New DC"></div>
+                        </div>
+                        <div class="demand-counter">
+                            <span class="counter-label">Global GPU Financing Demand</span>
+                            <span class="counter-value" id="globalDemand">$200,000,000,000+</span>
+                        </div>
+                    </div>
+
+                    <div class="level-stats global-stats">
+                        <div class="stat-box">
+                            <span class="stat-number">1M+</span>
+                            <span class="stat-label">GPUs Needed</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">100+</span>
+                            <span class="stat-label">Datacenters</span>
+                        </div>
+                        <div class="stat-box mega-highlight">
+                            <span class="stat-number">$200B+</span>
+                            <span class="stat-label">Total Demand</span>
+                        </div>
+                    </div>
+
+                    <div class="scale-insight">
+                        <div class="insight-icon">!</div>
+                        <p><strong>Banks can't touch this.</strong> Basel III rules, depreciation, and slow securitization make traditional financing impossible. That's where USD.AI comes in.</p>
+                    </div>
+
+                    <button class="zoom-btn primary" onclick="goToSection('pool')">See How USD.AI Finances This</button>
+                </div>
+            </div>
+
+            <!-- Reset button -->
+            <button class="reset-zoom-btn" id="resetZoom" onclick="zoomToLevel(1)">Reset</button>
         </div>
     </section>
 
