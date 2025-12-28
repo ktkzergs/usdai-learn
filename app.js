@@ -7,9 +7,8 @@ const state = {
     // Story
     currentScene: 1,
 
-    // GPU Scale Visualization
-    currentZoomLevel: 1,
-    selectedLocation: 'New York',
+    // Infrastructure Panels
+    currentPanel: 1,
 
     // Pool Builder
     poolSize: 10000000, // $10M base pool
@@ -83,84 +82,55 @@ function nextScene(n) {
     if (newEl) newEl.classList.remove('hidden');
 }
 
-// ==================== CHAPTER 2: GPU SCALE VISUALIZATION ====================
+// ==================== CHAPTER 2: INFRASTRUCTURE PANELS ====================
 
 function initGpuDragDrop() {
-    // Datacenter dots - click to zoom to datacenter
-    document.querySelectorAll('.dc-dot.clickable').forEach(dot => {
+    // Panel navigation dots
+    document.querySelectorAll('.panel-dot').forEach(dot => {
         dot.addEventListener('click', () => {
-            const location = dot.dataset.location;
-            const label = dot.dataset.label;
-            state.selectedLocation = label;
-
-            // Update datacenter title
-            const dcTitle = document.getElementById('dcTitle');
-            const dcLabel = document.getElementById('dcLabel');
-            if (dcTitle) dcTitle.textContent = `Inside ${label} Datacenter`;
-            if (dcLabel) dcLabel.textContent = `${label} Datacenter`;
-
-            zoomToLevel(2);
+            const panelNum = parseInt(dot.dataset.panel);
+            goToPanel(panelNum);
         });
     });
 
-    // Racks - click to zoom to rack view
-    document.querySelectorAll('.mini-rack.clickable-rack').forEach(rack => {
-        rack.addEventListener('click', () => {
-            zoomToLevel(3);
-        });
-    });
-
-    // GPU slots - click to zoom to GPU detail
-    document.querySelectorAll('.rack-unit-mini.clickable-gpu').forEach(gpu => {
-        gpu.addEventListener('click', () => {
-            zoomToLevel(4);
-        });
-    });
-
-    // Zoom level indicator clicks
-    document.querySelectorAll('.zoom-level').forEach(level => {
-        level.addEventListener('click', () => {
-            const levelNum = parseInt(level.dataset.level);
-            if (levelNum <= state.currentZoomLevel) {
-                zoomToLevel(levelNum);
-            }
+    // Datacenter markers - click to go to panel 2
+    document.querySelectorAll('.dc-marker').forEach(marker => {
+        marker.addEventListener('click', () => {
+            goToPanel(2);
         });
     });
 }
 
-function zoomToLevel(level) {
-    state.currentZoomLevel = level;
+function goToPanel(panelNum) {
+    state.currentPanel = panelNum;
 
-    // Update scale levels
-    document.querySelectorAll('.scale-level').forEach(l => l.classList.remove('active'));
-    const targetLevel = document.getElementById(`level${level}`);
-    if (targetLevel) targetLevel.classList.add('active');
+    // Update panels
+    document.querySelectorAll('.infra-panel').forEach(p => p.classList.remove('active'));
+    const targetPanel = document.getElementById(`panel${panelNum}`);
+    if (targetPanel) targetPanel.classList.add('active');
 
-    // Update zoom indicator
-    document.querySelectorAll('.zoom-level').forEach((z, i) => {
-        const zLevel = i + 1;
-        z.classList.remove('active', 'completed');
-        if (zLevel < level) {
-            z.classList.add('completed');
-        } else if (zLevel === level) {
-            z.classList.add('active');
+    // Update panel dots
+    document.querySelectorAll('.panel-dot').forEach((dot, i) => {
+        const dotPanel = i + 1;
+        dot.classList.remove('active', 'completed');
+        if (dotPanel < panelNum) {
+            dot.classList.add('completed');
+        } else if (dotPanel === panelNum) {
+            dot.classList.add('active');
         }
     });
 
-    document.querySelectorAll('.zoom-line').forEach((line, i) => {
-        line.classList.toggle('completed', i + 1 < level);
-    });
+    // Show/hide back button
+    const backBtn = document.getElementById('panelBack');
+    if (backBtn) backBtn.classList.toggle('visible', panelNum > 1);
 
-    // Show/hide navigation buttons
-    const backBtn = document.getElementById('backZoom');
-    const resetBtn = document.getElementById('resetZoom');
-    if (backBtn) backBtn.classList.toggle('visible', level > 1);
-    if (resetBtn) resetBtn.classList.toggle('visible', level > 1);
+    // Scroll to top of section
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function zoomBack() {
-    if (state.currentZoomLevel > 1) {
-        zoomToLevel(state.currentZoomLevel - 1);
+function goToPrevPanel() {
+    if (state.currentPanel > 1) {
+        goToPanel(state.currentPanel - 1);
     }
 }
 
